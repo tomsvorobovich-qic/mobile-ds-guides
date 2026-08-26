@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Scroll patterns — stand</title>
+  <link rel="stylesheet" href="../assets/site.css">
+  <link rel="stylesheet" href="../assets/stand.css">
+</head>
+<body class="page">
+<header class="page__header">
+  <a class="page__home" href="../">Mobile DS Guides</a>
+  &nbsp;·&nbsp;<a href="../guides/scroll-patterns.html">Read the guide</a>
+</header>
+
+<div class="stand">
+
+  <div class="panel">
+    <div class="panel__group">
+      <span class="panel__label">Surface stack</span>
+      <div class="panel__seg">
+        <label><input type="radio" name="stack" value="tertiary-primary" checked><span>tertiary → primary</span></label>
+        <label><input type="radio" name="stack" value="tertiary-secondary"><span>tertiary → secondary</span></label>
+        <label><input type="radio" name="stack" value="accent-primary"><span>accent → primary</span></label>
+      </div>
+    </div>
+
+    <div class="panel__group">
+      <span class="panel__label">Hero height</span>
+      <div class="panel__row">
+        <input type="range" min="120" max="420" step="4" value="260" data-var="--hero-h" data-unit="px">
+        <span class="panel__value" data-out="--hero-h"></span>
+      </div>
+    </div>
+
+    <div class="panel__group">
+      <span class="panel__label">Overlap</span>
+      <div class="panel__row">
+        <input type="range" min="0" max="140" step="2" value="68" data-var="--overlap" data-unit="px">
+        <span class="panel__value" data-out="--overlap"></span>
+      </div>
+    </div>
+
+    <div class="panel__group">
+      <span class="panel__label">Top radius</span>
+      <div class="panel__row">
+        <input type="range" min="0" max="40" step="1" value="20" data-var="--radius" data-unit="px">
+        <span class="panel__value" data-out="--radius"></span>
+      </div>
+    </div>
+
+    <div class="panel__group">
+      <span class="panel__label">Paint window (B1)</span>
+      <div class="panel__row">
+        <input type="range" min="0" max="300" step="5" value="130" data-var="--paint-start" data-unit="px">
+        <span class="panel__value" data-out="--paint-start"></span>
+      </div>
+      <div class="panel__row">
+        <input type="range" min="10" max="200" step="5" value="50" data-var="--paint-distance" data-unit="px">
+        <span class="panel__value" data-out="--paint-distance"></span>
+      </div>
+    </div>
+
+    <div class="panel__group">
+      <span class="panel__label">Debug</span>
+      <label class="panel__check"><input type="checkbox" data-toggle="debug"> layers + thresholds</label>
+    </div>
+  </div>
+
+  <div class="stand__grid">
+
+    <!-- ============ A — collapsing header ============ -->
+    <div class="stand__item">
+      <h2>A — Collapsing header</h2>
+      <span class="stand__tag">nav bar opaque from the start · no script</span>
+      <div class="phone" data-pattern="A">
+        <div class="phone__screen">
+          <div class="phone__scroll phone__scroll--inset">
+            <div class="pagetitle">Car market</div>
+            <div class="surface surface--flush">
+              <div class="subheader">
+                <div class="search">Search 12 480 cars</div>
+                <div class="tabs"><span aria-current="true">Fresh</span><span>New</span><span>Used</span></div>
+              </div>
+              <div class="cards" data-fill="cards"></div>
+            </div>
+          </div>
+          <div class="phone__chrome phone__chrome--fill">
+            <div class="statusbar">
+              <span>9:41</span>
+              <span class="statusbar__glyphs">
+                <i class="statusbar__bar"></i><i class="statusbar__bar"></i><i class="statusbar__bar"></i><i class="statusbar__bar"></i>
+                <i class="statusbar__battery"></i>
+              </span>
+            </div>
+            <div class="navbar">
+              <span class="navbar__btn">←</span>
+              <span class="navbar__title">Car market</span>
+              <span class="navbar__btn">⋯</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="stand__note">The page title is an ordinary element in flow, so it just leaves. The search + tabs block is <code>sticky</code> against the top of a scrollport that already starts below the nav bar. No scroll listener anywhere.</p>
+      <div class="stand__readout"></div>
+    </div>
+
+    <!-- ============ B1 — nav bar paints ============ -->
+    <div class="stand__item">
+      <h2>B1 — Nav bar paints</h2>
+      <span class="stand__tag">nav bar has its own fill · content has no radius</span>
+      <div class="phone" data-pattern="B1">
+        <div class="phone__screen">
+          <div class="phone__scroll">
+            <div class="hero"><span class="hero__label">Hero photo</span></div>
+            <div class="surface surface--flush">
+              <div class="detail">
+                <div class="detail__price">QAR 189 000</div>
+                <div class="detail__title">Toyota Land Cruiser VXR · 2021</div>
+                <div class="detail__rows" data-fill="rows"></div>
+              </div>
+            </div>
+          </div>
+          <div class="threshold" data-at="--paint-start" data-label="paint start"></div>
+          <div class="phone__chrome">
+            <div class="chrome-fill"></div>
+            <div class="statusbar">
+              <span>9:41</span>
+              <span class="statusbar__glyphs">
+                <i class="statusbar__bar"></i><i class="statusbar__bar"></i><i class="statusbar__bar"></i><i class="statusbar__bar"></i>
+                <i class="statusbar__battery"></i>
+              </span>
+            </div>
+            <div class="navbar">
+              <span class="navbar__btn navbar__btn--scrim">←</span>
+              <span class="navbar__title navbar__title--paint">Land Cruiser VXR</span>
+              <span class="navbar__btn navbar__btn--scrim">♡</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="stand__note">The photo must stay readable right up to the top edge, so the nav bar gets a real fill that interpolates over a window. The icon scrim fades out on the same window, inverted. This is the one pattern where animating the nav bar background is correct.</p>
+      <div class="stand__readout"></div>
+    </div>
+
+    <!-- ============ B2 — surface overflow ============ -->
+    <div class="stand__item">
+      <h2>B2 — Surface overflow</h2>
+      <span class="stand__tag">nav bar filled with the page token · never animated</span>
+      <div class="phone" data-pattern="B2">
+        <div class="phone__screen">
+          <div class="phone__scroll">
+            <div style="height: var(--chrome-h)"></div>
+            <div class="chiprow" data-pin>
+              <span class="chip chip--accent">Filters 3</span>
+              <span class="chip">Make</span>
+              <span class="chip">Price</span>
+              <span class="chip">Year</span>
+              <span class="chip">Mileage</span>
+            </div>
+            <div class="surface surface--overflow">
+              <div class="cards" data-fill="cards"></div>
+            </div>
+          </div>
+          <div class="threshold" data-at="--overlap" data-label="overlap"></div>
+          <div class="phone__chrome phone__chrome--page">
+            <div class="statusbar">
+              <span>9:41</span>
+              <span class="statusbar__glyphs">
+                <i class="statusbar__bar"></i><i class="statusbar__bar"></i><i class="statusbar__bar"></i><i class="statusbar__bar"></i>
+                <i class="statusbar__battery"></i>
+              </span>
+            </div>
+            <div class="navbar">
+              <span class="navbar__btn">←</span>
+              <span class="navbar__title">Results</span>
+              <span class="navbar__btn">⋯</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="stand__note">The chip row is held for the first <code>overlap</code> px while the rounded surface climbs over it; after that the two travel together. Nothing about the nav bar changes — the colour you read there is the page background.</p>
+      <div class="stand__readout"></div>
+    </div>
+
+    <!-- ============ B2 on accent ============ -->
+    <div class="stand__item">
+      <h2>B2 on accent</h2>
+      <span class="stand__tag">same mechanic, hero is colour + graphics, not a photo</span>
+      <div class="phone" data-pattern="B2" style="--level-page: var(--surface-accent); --overlap: 24px">
+        <div class="phone__screen">
+          <div class="phone__scroll">
+            <div class="hero hero--accent" data-pin>
+              <div class="hero__graphic"></div>
+              <span class="hero__label">Accent header</span>
+            </div>
+            <div class="surface surface--overflow">
+              <div class="cards" data-fill="cards"></div>
+            </div>
+          </div>
+          <div class="phone__chrome phone__chrome--page phone__chrome--over">
+            <div class="statusbar">
+              <span>9:41</span>
+              <span class="statusbar__glyphs">
+                <i class="statusbar__bar"></i><i class="statusbar__bar"></i><i class="statusbar__bar"></i><i class="statusbar__bar"></i>
+                <i class="statusbar__battery"></i>
+              </span>
+            </div>
+            <div class="navbar">
+              <span class="navbar__btn">←</span>
+              <span class="navbar__title">Travel</span>
+              <span class="navbar__btn">⋯</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="stand__note">Proof that B2 is not about photography. Swap the hero for an accent field and the mechanic is unchanged — which is why the deciding question is “does the hero have to survive under the chrome?”, not “is the hero an image?”.</p>
+      <div class="stand__readout"></div>
+    </div>
+
+  </div>
+</div>
+
+<footer class="page__footer">
+  Placeholder palette — swap <code>--surface-*</code> in <code>assets/stand.css</code> for the real tokens.
+</footer>
+
+<script src="../assets/stand.js"></script>
+</body>
+</html>

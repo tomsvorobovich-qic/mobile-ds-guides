@@ -1,0 +1,5 @@
+title: Mobile DS Guides
+description: Scroll, navigation and surface patterns for the mobile design system.
+exclude:
+  - README.md
+  - CONTRIBUTING.md
