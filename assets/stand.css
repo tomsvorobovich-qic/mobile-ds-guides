@@ -756,7 +756,7 @@ html, body { margin: 0; background: #000; }
 .xray i.xray__clip::after    { top: -8px; }
 .xray i.xray__row::after     { top: 26px; }
 .xray i.xray__surface::after { top: 48px; }
-.xray i.xray__content::after { top: auto; bottom: 8px; }
+.xray i.xray__content::after { top: 74px; }
 
 /* весь контент скролла, без обрезки: видно, сколько спрятано */
 .xray__content {
