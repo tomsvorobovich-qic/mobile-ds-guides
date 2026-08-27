@@ -3,16 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Surface overflow — стенд</title>
+  <title>Хедер и поверхности — стенд</title>
   <link rel="stylesheet" href="../assets/stand.css">
 </head>
 <body>
 <div class="board">
 
   <div class="board__head">
-    <h1 class="board__title">Surface overflow</h1>
-    <p class="board__lede">Полотно контента со скруглением 32pt уходит под хром, а навбар не
-      меняется: цвет, который там читается, — это фон страницы. Экраны живые, их можно скроллить.</p>
+    <h1 class="board__title">Хедер и поверхности</h1>
+    <p class="board__lede">Паттерны хедера отличаются одним: чем закрыта полоса навбара,
+      когда экран прокручен. Экраны живые — их можно скроллить.</p>
     <p class="board__links"><a href="../">Оглавление</a> · <a href="../guides/scroll-patterns.html">Гайд</a></p>
   </div>
 
@@ -21,12 +21,22 @@
     <label><input type="checkbox" data-toggle="debug"> границы слоёв</label>
   </div>
 
+  <div class="board__section">
+    <h2>Overflow</h2>
+    <p>Полосу закрывает само полотно контента: оно наезжает скруглённым верхом и уходит под
+      хром. Навбар залит фоном страницы и не меняется. Ниже — один паттерн на трёх стеках
+      поверхностей.</p>
+  </div>
+
   <div class="board__row">
 
-    <!-- ============ 1 — фон страницы + полотно ============ -->
     <div class="sample">
-      <h2 class="sample__title">Surface overflow 1</h2>
-      <div class="device-slot">
+      <div class="sample__head">
+        <h3 class="sample__name">Plain</h3>
+        <p class="sample__sub">tertiary → primary</p>
+        <p class="sample__use"><b>Берите, если</b> на экране одно плоское полотно: текст, простой список, детали.</p>
+      </div>
+<div class="device-slot">
         <div class="device">
           <div class="device__screen">
             <div class="screen__bg"></div>
@@ -42,14 +52,18 @@
           <div class="device__frame"></div>
         </div>
       </div>
-      <p class="sample__caption">Tertiary — фон страницы. Primary — полотно скролла.</p>
+      <p class="sample__how">Полотно стоит под навбаром и уходит под него скруглённым верхом.</p>
       <div class="sample__readout"></div>
     </div>
 
-    <!-- ============ 2 — лента ============ -->
+
     <div class="sample" style="--level-scroll: var(--bg-secondary)">
-      <h2 class="sample__title">Surface overflow 2</h2>
-      <div class="device-slot">
+      <div class="sample__head">
+        <h3 class="sample__name">Feed</h3>
+        <p class="sample__sub">tertiary → secondary → primary</p>
+        <p class="sample__use"><b>Берите, если</b> элементы должны читаться отдельными карточками на утопленном поле.</p>
+      </div>
+<div class="device-slot">
         <div class="device">
           <div class="device__screen">
             <div class="screen__bg"></div>
@@ -66,16 +80,18 @@
           <div class="device__frame"></div>
         </div>
       </div>
-      <p class="sample__caption">Tertiary — фон страницы, secondary — полотно скролла,
-        primary — блоки контента. Ряд фильтров придерживается 68pt, полотно наезжает на него
-        скруглённым верхом — так сделана лента.</p>
+      <p class="sample__how">Ряд фильтров придерживается 68pt — ровно на эту разницу полотно и наезжает.</p>
       <div class="sample__readout"></div>
     </div>
 
-    <!-- ============ 3 — акцентный hero ============ -->
+
     <div class="sample" style="--level-page: var(--bg-brand)">
-      <h2 class="sample__title">Surface overflow 3</h2>
-      <div class="device-slot">
+      <div class="sample__head">
+        <h3 class="sample__name">Accent</h3>
+        <p class="sample__sub">accent → primary</p>
+        <p class="sample__use"><b>Берите, если</b> разделу нужен брендовый верх с графикой.</p>
+      </div>
+<div class="device-slot">
         <div class="device">
           <div class="device__screen">
             <div class="screen__bg">
@@ -95,25 +111,27 @@
           <div class="device__frame"></div>
         </div>
       </div>
-      <p class="sample__caption">Accent — фон страницы, с графикой. Скроллящаяся часть —
-        как в первом и втором кейсах. Наезд здесь статический и равен радиусу.</p>
+      <p class="sample__how">Графика лежит на фоновом слое и не обрезается навбаром. Наезд статический, равен радиусу.</p>
       <div class="sample__readout"></div>
     </div>
 
   </div>
 
   <div class="board__section">
-    <h2>Поведение</h2>
-    <p>Карточка объявления — из кода апки. Промо-лендинг — из макета
-      (44220:13280 и 36178:6775), в приложении пока не собран.</p>
+    <h2>Paint и Dissolve</h2>
+    <p>В обоих hero приколот к верху и никуда не уезжает. Расходятся они только в том, чем
+      закрыта полоса навбара.</p>
   </div>
 
   <div class="board__row">
 
-    <!-- ============ 4 — карточка объявления ============ -->
     <div class="sample" style="--level-scroll: var(--bg-secondary); --level-page: var(--bg-secondary)">
-      <h2 class="sample__title">Навбар закрашивается</h2>
-      <div class="device-slot">
+      <div class="sample__head">
+        <h3 class="sample__name">Paint</h3>
+        <p class="sample__sub">карточка объявления</p>
+        <p class="sample__use"><b>Берите, если</b> под хромом фото и оно должно быть видно до верхнего края.</p>
+      </div>
+<div class="device-slot">
         <div class="device" data-pattern="paint">
           <div class="device__screen">
             <div class="screen__bg"></div>
@@ -135,17 +153,18 @@
           <div class="device__frame"></div>
         </div>
       </div>
-      <p class="sample__caption">Фото уходит под статус-бар, поэтому радиуса тут нет — стык
-        прячет заливка навбара. Она не интерполируется: булев флип на пороге 155pt с
-        easeInOut 0.2s, вместе с ним появляется заголовок, хайрлайн 0.5pt и гаснет подложка
-        под глифами. Фото приколото к верху и сжимается, а не уезжает.</p>
+      <p class="sample__how">Навбар красит себя сам: флип на пороге 155pt, дальше переход 0.2s. Фото сжимается в слоте фиксированной высоты. Скругления нет.</p>
       <div class="sample__readout"></div>
     </div>
 
-    <!-- ============ 5 — промо-лендинг Travel ============ -->
+
     <div class="sample" style="--level-page: var(--bg-secondary); --level-scroll: var(--bg-primary)">
-      <h2 class="sample__title">Промо-лендинг</h2>
-      <div class="device-slot">
+      <div class="sample__head">
+        <h3 class="sample__name">Dissolve <span class="sample__badge">в приложении не собран</span></h3>
+        <p class="sample__sub">промо-лендинг</p>
+        <p class="sample__use"><b>Берите, если</b> верх декоративный и его можно погасить.</p>
+      </div>
+<div class="device-slot">
         <div class="device" data-pattern="promo">
           <div class="device__screen">
             <div class="screen__bg">
@@ -176,15 +195,19 @@
           <div class="device__frame"></div>
         </div>
       </div>
-      <p class="sample__caption">Механика как в карточке объявления: hero остаётся стики, а
-        контент наслаивается поверх. Разница в том, чем закрывается полоса навбара — своей
-        заливки тут нет, вместо неё hero параллельно наезду осветляется до фона страницы,
-        и к концу скролла в полосе уже фон. Заголовок и чернила глифов переключаются на
-        середине этого пути.</p>
+      <p class="sample__how">Hero осветляется до фона страницы, поэтому заливка навбару не нужна. Скругление есть.</p>
       <div class="sample__readout"></div>
     </div>
 
   </div>
+
+  <div class="board__note">
+    <h3>Collapse — четвёртый паттерн</h3>
+    <p>Полоса навбара не меняется вообще: он залит уровнем скролла с самого начала. Крупный
+      заголовок под ним уезжает обычным элементом, а блок управления пиннится и остаётся.
+      Фрейма здесь нет — в приложении этот паттерн не собран.</p>
+  </div>
+
   <footer class="board__footer">
     <p>Геометрия внутри мокапа — в pt, один к одному со спекой; сам мокап уменьшен.
       Корпус, статус-бар и навбар — слои из Figma (44267:14400, 44267:14385, 44267:14386).</p>

@@ -11,9 +11,10 @@ title: Mobile DS Guides
 
 <ul class="card-list">
   <li>
-    <a href="guides/scroll-patterns.html">Скролл, навбар и поверхности</a>
-    <p>Две оси: уровни поверхностей и поведение хедера. Когда у навбара есть своя
-    заливка, а когда её быть не должно. <a href="stands/scroll-patterns.html">Стенд →</a></p>
+    <a href="guides/scroll-patterns.html">Хедер и поверхности</a>
+    <p>Четыре паттерна — <code>Overflow</code>, <code>Paint</code>, <code>Dissolve</code>,
+    <code>Collapse</code> — и три вопроса, по которым выбирается нужный.
+    <a href="stands/scroll-patterns.html">Стенд →</a></p>
   </li>
 </ul>
 
