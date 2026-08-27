@@ -749,19 +749,19 @@ html, body { margin: 0; background: #000; }
 .xray i::after {
   content: attr(data-label);
   position: absolute;
-  left: calc(100% + 14px);
+  left: calc(100% + 30px);
   top: -6px;
   white-space: nowrap;
 }
 
 /* Ярлыки разнесены по вертикали, иначе слипаются у верхней кромки.
    Селектор с `i` — чтобы перебить общее правило выше по специфичности. */
-.xray i.xray__chrome::after  { top: 8px; }
-.xray i.xray__clip::after    { top: -8px; }
-.xray i.xray__row::after     { top: 26px; }
-.xray i.xray__surface::after { top: 48px; }
-.xray i.xray__content::after { top: 74px; }
-.xray i.xray__mark::after    { top: -8px; color: #6568f4; }
+.xray i.xray__chrome::after  { top: 10px; }
+.xray i.xray__clip::after    { top: -12px; }
+.xray i.xray__row::after     { top: 30px; }
+.xray i.xray__surface::after { top: 72px; }
+.xray i.xray__content::after { top: 114px; }
+.xray i.xray__mark::after    { top: -12px; color: #6568f4; }
 
 /* весь контент скролла, без обрезки: видно, сколько спрятано */
 .xray__content {
