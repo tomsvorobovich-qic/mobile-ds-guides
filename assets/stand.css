@@ -588,8 +588,14 @@ html, body { margin: 0; background: #000; }
   pointer-events: none;
 }
 
+/* Блок управления — карточка уровня блока на полотне, а не часть полотна.
+   Внутри неё поле и плитки уходят на уровень ниже: это утопленные контролы,
+   а не поднятые блоки. */
 .controls {
-  padding: 20px 16px 24px;
+  margin: 0 0 24px;
+  padding: 16px;
+  border-radius: var(--radius-xl);
+  background: var(--level-block);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -668,7 +674,7 @@ html, body { margin: 0; background: #000; }
    что делает паттерн, — переносит заголовок в навбар. Карточка скруглена со всех
    сторон, потому что вокруг неё виден фон страницы. */
 .subhead {
-  background: var(--level-scroll);
+  background: var(--level-block);
   border-radius: var(--radius-xl);
   padding: 16px;
   display: flex;
