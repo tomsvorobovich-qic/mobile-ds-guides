@@ -84,6 +84,16 @@ document.querySelectorAll('.device').forEach((device) => {
       parts.push(`осветление ${progress.toFixed(2)}`);
     }
 
+    /* Collapse: сам коллапс скрипта не требует — заголовок уезжает как
+       обычный элемент, подхедер `sticky`. Порог нужен только заголовку в
+       навбаре: он появляется, когда крупный ушёл под полосу. */
+    if (pattern === 'collapse') {
+      const title = device.querySelector('.pagetitle');
+      const limit = title ? title.offsetTop + title.offsetHeight : 0;
+      device.classList.toggle('is-scrolled', limit > 0 && y >= limit);
+      parts.push(`заголовок ${Math.round(Math.min(y, limit))} из ${limit}`);
+    }
+
     if (readout) readout.textContent = parts.join(' · ');
   };
 

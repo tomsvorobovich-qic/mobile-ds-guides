@@ -201,12 +201,47 @@
 
   </div>
 
-  <div class="board__note">
-    <h3>Collapse — четвёртый паттерн</h3>
-    <p>Полоса навбара не меняется вообще: он залит уровнем скролла с самого начала. Крупный
-      заголовок под ним уезжает обычным элементом, а блок управления пиннится и остаётся.
-      Фрейма здесь нет — в приложении этот паттерн не собран.</p>
+  <div class="board__section">
+    <h2>Collapse</h2>
+    <p>Полоса навбара не меняется вообще: она залита фоном страницы, как в <code>Overflow</code>.
+      Уезжает крупный заголовок, а блок управления остаётся приколотым под навбаром.</p>
   </div>
+
+  <div class="board__row">
+
+    <div class="sample">
+      <div class="sample__head">
+        <h3 class="sample__name">Collapse <span class="sample__badge">в приложении не собран</span></h3>
+        <p class="sample__sub">лента с крупным заголовком</p>
+        <p class="sample__use"><b>Берите, если</b> нужен крупный заголовок и постоянно видимый блок управления.</p>
+      </div>
+      <div class="device-slot">
+        <div class="device" data-pattern="collapse">
+          <div class="device__screen">
+            <div class="screen__bg"></div>
+            <div class="screen__scroll">
+              <div class="pagetitle"></div>
+              <div class="subhead">
+                <div class="searchfield"></div>
+                <div class="categories"><i></i><i></i><i></i></div>
+              </div>
+              <div class="surface"><div class="blocks" data-blocks="5"></div></div>
+            </div>
+            <div class="chrome">
+              <div class="statusbar"></div>
+              <div class="navbar"></div>
+              <span class="navbar-title"></span>
+            </div>
+            <div class="home"></div>
+          </div>
+          <div class="device__frame"></div>
+        </div>
+      </div>
+      <p class="sample__how">Полоса навбара не меняется — она залита фоном страницы. Крупный заголовок уезжает обычным элементом, блок управления пиннится, а в навбаре появляется заголовок экрана.</p>
+      <div class="sample__readout"></div>
+    </div>
+  </div>
+
 
   <footer class="board__footer">
     <p>Геометрия внутри мокапа — в pt, один к одному со спекой; сам мокап уменьшен.
