@@ -19,6 +19,7 @@
   <div class="board__controls">
     <label><input type="checkbox" data-toggle="sync" checked> синхронный скролл</label>
     <label><input type="checkbox" data-toggle="debug"> границы слоёв</label>
+    <label><input type="checkbox" data-toggle="xray"> что за рамкой</label>
   </div>
 
   <div class="board__section">
@@ -65,6 +66,13 @@
       </div>
 <div class="device-slot">
         <div class="device">
+          <div class="xray">
+            <i class="xray__content" data-label="контент скролла целиком"></i>
+            <i class="xray__chrome" data-label="хром, не скроллится"></i>
+            <i class="xray__clip" data-label="кромка вьюпорта — она и режет"></i>
+            <i class="xray__row" data-label="придержанный ряд"></i>
+            <i class="xray__surface" data-label="верх полотна"></i>
+          </div>
           <div class="device__screen">
             <div class="screen__bg"></div>
             <div class="screen__scroll">

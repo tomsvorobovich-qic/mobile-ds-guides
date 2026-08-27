@@ -706,3 +706,91 @@ html, body { margin: 0; background: #000; }
 }
 
 .categories i:first-child { background: var(--bg-brand); box-shadow: none; }
+
+/* ==================================================================
+   Режим «что за рамкой» — прототип на Overflow / Feed.
+
+   Рисует силуэт по тем же переменным, которыми живёт сам паттерн: если
+   контур разойдётся с картинкой, значит паттерн собран неверно. Слой
+   лежит в системе координат экрана, но выходит за его пределы — именно
+   это и нужно показать.
+   ================================================================== */
+
+.xray {
+  position: absolute;
+  left: var(--screen-x);
+  top: var(--screen-y);
+  width: var(--screen-w);
+  height: var(--screen-h);
+  z-index: 40;
+  pointer-events: none;
+  display: none;
+  font: 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: #ff4081;
+}
+
+.board--xray .xray { display: block; }
+
+/* Корпус приглушаем, чтобы силуэт читался и поверх него; сам экран не
+   трогаем — контент должен оставаться видимым. */
+.board--xray .device__frame { opacity: 0.45; }
+
+.xray i {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: block;
+}
+
+.xray i::after {
+  content: attr(data-label);
+  position: absolute;
+  left: calc(100% + 14px);
+  top: -6px;
+  white-space: nowrap;
+}
+
+/* Ярлыки разнесены по вертикали, иначе слипаются у верхней кромки.
+   Селектор с `i` — чтобы перебить общее правило выше по специфичности. */
+.xray i.xray__chrome::after  { top: 8px; }
+.xray i.xray__clip::after    { top: -8px; }
+.xray i.xray__row::after     { top: 26px; }
+.xray i.xray__surface::after { top: 48px; }
+.xray i.xray__content::after { top: auto; bottom: 8px; }
+
+/* весь контент скролла, без обрезки: видно, сколько спрятано */
+.xray__content {
+  border: 1px dashed rgba(255, 64, 129, 0.55);
+  background: rgba(255, 64, 129, 0.06);
+  top: calc(var(--chrome-h) - var(--x-scroll, 0px));
+  height: var(--x-content-h, 0px);
+}
+
+/* полоса хрома — она не скроллится */
+.xray__chrome {
+  top: 0;
+  height: var(--chrome-h);
+  background: rgba(101, 104, 244, 0.14);
+  border-bottom: 1px solid rgba(101, 104, 244, 0.6);
+}
+
+/* верхняя кромка вьюпорта: именно она режет уезжающий контент */
+.xray__clip {
+  top: var(--chrome-h);
+  height: 0;
+  border-top: 2px solid #ff4081;
+}
+
+/* придержанный ряд на его живой позиции */
+.xray__row {
+  top: calc(var(--chrome-h) + var(--x-pin, 0px) - var(--x-scroll, 0px));
+  height: var(--filter-overlap);
+  border: 1px solid rgba(255, 64, 129, 0.9);
+}
+
+/* верх полотна — видно, как он наезжает */
+.xray__surface {
+  top: calc(var(--x-surface-y, 0px) - var(--x-scroll, 0px) + var(--chrome-h));
+  height: 0;
+  border-top: 1px dashed rgba(20, 22, 31, 0.55);
+}

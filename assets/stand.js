@@ -14,12 +14,15 @@ document.querySelectorAll('[data-blocks]').forEach((node) => {
 
 const syncToggle = document.querySelector('[data-toggle="sync"]');
 const debugToggle = document.querySelector('[data-toggle="debug"]');
+const xrayToggle = document.querySelector('[data-toggle="xray"]');
 
-if (debugToggle) {
-  const apply = () => board.classList.toggle('board--debug', debugToggle.checked);
-  debugToggle.addEventListener('change', apply);
+/* Оба режима — просто класс на борде; всё остальное делает CSS. */
+[[debugToggle, 'board--debug'], [xrayToggle, 'board--xray']].forEach(([input, cls]) => {
+  if (!input) return;
+  const apply = () => board.classList.toggle(cls, input.checked);
+  input.addEventListener('change', apply);
   apply();
-}
+});
 
 const frames = [];
 let echoing = false;
@@ -92,6 +95,23 @@ document.querySelectorAll('.device').forEach((device) => {
       const limit = title ? title.offsetTop + title.offsetHeight : 0;
       device.classList.toggle('is-scrolled', limit > 0 && y >= limit);
       parts.push(`заголовок ${Math.round(Math.min(y, limit))} из ${limit}`);
+    }
+
+    /* Силуэт для режима «что за рамкой»: те же величины, что использует
+       сам паттерн, — расхождение контура с картинкой означало бы ошибку в
+       паттерне, а не в разметке силуэта. */
+    if (device.querySelector('.xray')) {
+      const content = scroll.firstElementChild
+        ? scroll.scrollHeight
+        : 0;
+      const sur = device.querySelector('.surface');
+      device.style.setProperty('--x-scroll', `${y}px`);
+      device.style.setProperty('--x-content-h', `${content}px`);
+      device.style.setProperty('--x-surface-y', `${sur ? sur.offsetTop : 0}px`);
+      if (pinned) {
+        device.style.setProperty('--x-pin',
+          `${Math.max(0, Math.min(y, num('--filter-overlap')))}px`);
+      }
     }
 
     if (readout) readout.textContent = parts.join(' · ');
