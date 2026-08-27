@@ -332,7 +332,12 @@ html, body { margin: 0; background: #000; }
    это сделано в ленте (карточки там тоже edge-to-edge, замерено). Одинаково во
    всех фреймах: делит везде одинаково. */
 .blocks { display: flex; flex-direction: column; gap: 4px; }
-.block { height: 260px; background: var(--level-block); }
+/* Белый контейнер: радиус — токен radius/xl, как у остальных контейнеров. */
+.block {
+  height: 260px;
+  border-radius: var(--radius-xl);
+  background: var(--level-block);
+}
 
 /* ---------- ряд фильтров ленты ----------
    Геометрия ряда — не на глаз: чип 44 + 2×12 вертикальных паддингов = 68,
