@@ -38,6 +38,48 @@ document.querySelectorAll('.device').forEach((device) => {
      Остальные экраны скриптовать нечем — там обычный поток. */
   const num = (name) => parseFloat(getComputedStyle(device).getPropertyValue(name)) || 0;
 
+  /* ---- слой «что за рамкой» ----
+     Строится по тому, что на экране реально есть: кромка клипа рисуется
+     только там, где скроллпорт заинсечен, ряд — только там, где его
+     придерживают, метка порога — только там, где порог есть. */
+  const xray = document.createElement('div');
+  xray.className = 'xray';
+  const bleed = scroll.classList.contains('screen__scroll--bleed');
+  const parts = [
+    ['content', 'контент скролла — вся высота'],
+    ['chrome', bleed ? 'хром — лежит поверх контента' : 'хром — не скроллится'],
+  ];
+  if (!bleed) parts.push(['clip', 'клип вьюпорта — режет контент']);
+  if (device.querySelector('[data-pin]')) parts.push(['row', 'ряд фильтров — придержан']);
+  if (device.querySelector('.surface')) parts.push(['surface', 'полотно — верхняя кромка']);
+  parts.forEach(([cls, label]) => {
+    const el = document.createElement('i');
+    el.className = 'xray__' + cls;
+    el.dataset.label = label;
+    xray.appendChild(el);
+  });
+  device.appendChild(xray);
+
+  /* Порог живёт не на экране, а на самом контенте: метка едет вместе с ним,
+     и пересечение с кромкой вьюпорта означает, что эффект сработал. */
+  const markEl = document.createElement('i');
+  markEl.className = 'xray__mark';
+  xray.appendChild(markEl);
+
+  const threshold = () => {
+    if (device.dataset.pattern === 'paint') return { at: 155, label: 'порог заливки — 155' };
+    if (device.dataset.pattern === 'promo') {
+      const sp = device.querySelector('.promo-space');
+      return sp ? { at: sp.offsetHeight, label: `конец осветления — ${sp.offsetHeight}` } : null;
+    }
+    if (device.dataset.pattern === 'collapse') {
+      const ti = device.querySelector('.pagetitle');
+      const at = ti ? Math.round(ti.offsetTop + ti.offsetHeight) : 0;
+      return at ? { at, label: `порог заголовка — ${at}` } : null;
+    }
+    return null;
+  };
+
   const pinned = device.querySelector('[data-pin]');
   const photo = device.querySelector('[data-photo]');
   const pattern = device.dataset.pattern;
@@ -97,21 +139,23 @@ document.querySelectorAll('.device').forEach((device) => {
       parts.push(`заголовок ${Math.round(Math.min(y, limit))} из ${limit}`);
     }
 
-    /* Силуэт для режима «что за рамкой»: те же величины, что использует
-       сам паттерн, — расхождение контура с картинкой означало бы ошибку в
-       паттерне, а не в разметке силуэта. */
-    if (device.querySelector('.xray')) {
-      const content = scroll.firstElementChild
-        ? scroll.scrollHeight
-        : 0;
-      const sur = device.querySelector('.surface');
-      device.style.setProperty('--x-scroll', `${y}px`);
-      device.style.setProperty('--x-content-h', `${content}px`);
-      device.style.setProperty('--x-surface-y', `${sur ? sur.offsetTop : 0}px`);
-      if (pinned) {
-        device.style.setProperty('--x-pin',
-          `${Math.max(0, Math.min(y, num('--filter-overlap')))}px`);
-      }
+    /* Силуэт: те же величины, что использует сам паттерн. Расхождение
+       контура с картинкой означало бы ошибку в паттерне, а не в разметке. */
+    const sur = device.querySelector('.surface');
+    device.style.setProperty('--x-scroll', `${y}px`);
+    device.style.setProperty('--x-content-h', `${scroll.scrollHeight}px`);
+    device.style.setProperty('--x-surface-y', `${sur ? sur.offsetTop : 0}px`);
+    if (pinned) {
+      device.style.setProperty('--x-pin',
+        `${Math.max(0, Math.min(y, num('--filter-overlap')))}px`);
+    }
+    const th = threshold();
+    if (th) {
+      device.style.setProperty('--x-mark', `${th.at}px`);
+      markEl.dataset.label = th.label;
+      markEl.style.display = '';
+    } else {
+      markEl.style.display = 'none';
     }
 
     if (readout) readout.textContent = parts.join(' · ');

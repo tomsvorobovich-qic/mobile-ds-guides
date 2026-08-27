@@ -735,6 +735,10 @@ html, body { margin: 0; background: #000; }
    трогаем — контент должен оставаться видимым. */
 .board--xray .device__frame { opacity: 0.45; }
 
+/* Ярлыки уходят вправо от экрана, поэтому в этом режиме ряду нужен запас,
+   иначе подписи наезжают на соседний фрейм. */
+.board--xray .board__row { gap: 64px calc(var(--device-w) * var(--scale) * 0.62); }
+
 .xray i {
   position: absolute;
   left: 0;
@@ -757,6 +761,7 @@ html, body { margin: 0; background: #000; }
 .xray i.xray__row::after     { top: 26px; }
 .xray i.xray__surface::after { top: 48px; }
 .xray i.xray__content::after { top: 74px; }
+.xray i.xray__mark::after    { top: -8px; color: #6568f4; }
 
 /* весь контент скролла, без обрезки: видно, сколько спрятано */
 .xray__content {
@@ -786,6 +791,14 @@ html, body { margin: 0; background: #000; }
   top: calc(var(--chrome-h) + var(--x-pin, 0px) - var(--x-scroll, 0px));
   height: var(--filter-overlap);
   border: 1px solid rgba(255, 64, 129, 0.9);
+}
+
+/* Метка порога: лежит на контенте, поэтому едет вместе с ним. Пересекла
+   кромку вьюпорта — значит эффект сработал. */
+.xray__mark {
+  top: calc(var(--chrome-h) + var(--x-mark, 0px) - var(--x-scroll, 0px));
+  height: 0;
+  border-top: 2px dashed rgba(101, 104, 244, 0.95);
 }
 
 /* верх полотна — видно, как он наезжает */
