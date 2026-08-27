@@ -5,22 +5,26 @@ title: Mobile DS Guides
 
 # Mobile DS Guides
 
-<p class="lede">Behavioural rules for the mobile design system — the parts a static
-mockup cannot carry. Every guide comes with an interactive stand you can scroll,
-tune and measure.</p>
+<p class="lede">Поведенческие правила мобильной дизайн-системы — то, что статичный
+макет не переносит. К каждому гайду идёт живой стенд: его можно скроллить и
+измерять, а не только рассматривать.</p>
 
 <ul class="card-list">
   <li>
-    <a href="guides/scroll-patterns.html">Scroll, nav bar and surface patterns</a>
-    <p>Two axes — surface levels and header behaviour. When the nav bar owns a
-    fill and when it must not. <a href="stands/scroll-patterns.html">Stand →</a></p>
+    <a href="guides/scroll-patterns.html">Скролл, навбар и поверхности</a>
+    <p>Две оси: уровни поверхностей и поведение хедера. Когда у навбара есть своя
+    заливка, а когда её быть не должно. <a href="stands/scroll-patterns.html">Стенд →</a></p>
   </li>
 </ul>
 
-## How to use these
+## Как этим пользоваться
 
-A guide is the rule; a stand is the proof. If they disagree, the stand is
-wrong — file it. If neither answers your screen, the pattern is missing, and
-that is worth a pull request.
+Гайд — это правило, стенд — доказательство. Если они расходятся, неправ стенд:
+заводите ишью. Если ни один не отвечает на ваш экран, значит паттерна нет — и это
+повод для пул-реквеста.
 
-[How to contribute →](https://github.com/tomsvorobovich-qic/mobile-ds-guides/blob/main/CONTRIBUTING.md)
+Числа в гайдах либо замерены с реализации, либо взяты из файла дизайна, и это
+всегда указано. Там, где значения расходятся между кодом и макетом, расхождение
+названо прямо, а не усреднено.
+
+[Как контрибьютить →](https://github.com/tomsvorobovich-qic/mobile-ds-guides/blob/main/CONTRIBUTING.md)

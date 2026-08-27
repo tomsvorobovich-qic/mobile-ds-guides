@@ -1,5 +1,5 @@
 title: Mobile DS Guides
-description: Scroll, navigation and surface patterns for the mobile design system.
+description: Поведенческие правила мобильной дизайн-системы: скролл, навбар, поверхности.
 exclude:
   - README.md
   - CONTRIBUTING.md

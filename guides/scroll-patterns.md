@@ -1,251 +1,249 @@
 ---
 layout: default
-title: Scroll, nav bar and surface patterns
+title: Скролл, навбар и поверхности
 ---
 
-# Scroll, nav bar and surface patterns
+# Скролл, навбар и поверхности
 
-<p class="lede">Two independent axes decide how a screen behaves under scroll: which
-<strong>surface level</strong> each layer sits on, and how the <strong>header</strong> reacts. Pick one from each
-axis — never one from a merged list.</p>
+<p class="lede">Поведение экрана при скролле задают две независимые оси: на каком
+<strong>уровне поверхности</strong> лежит каждый слой и как реагирует <strong>хедер</strong>.
+Спека экрана — по одному значению с каждой оси, а не одно из общего списка.</p>
 
-[Open the interactive stand →](../stands/scroll-patterns.html)
-
----
-
-## 1. Why two axes
-
-Most write-ups of this problem describe one axis and smuggle the other in as
-examples. That is where handoffs break: two screens get filed under the same
-pattern name while their nav bars work by entirely different mechanics.
-
-Keep them separate:
-
-- **Axis 1 — surfaces.** Which token fills the page, the scrolling container,
-  and the content blocks inside it.
-- **Axis 2 — header behaviour.** What leaves, what stays, and whether the nav
-  bar's fill ever changes.
-
-A screen spec is one value from each. "Accent page + surface overflow" and
-"tertiary page + surface overflow" are the same behaviour on different surfaces
-— not two patterns.
+[Открыть живой стенд →](../stands/scroll-patterns.html)
 
 ---
 
-## 2. Axis 1 — surface levels
+## 1. Зачем две оси
 
-Three roles, filled by tokens:
+Обычно эту задачу описывают по одной оси, а вторую протаскивают примерами. Именно
+здесь ломается хендофф: два экрана попадают под одно имя паттерна, хотя навбары у
+них работают по совершенно разным механикам.
 
-| Role | What it is | Typical token |
+Держим оси раздельно:
+
+- **Ось 1 — поверхности.** Каким токеном залиты страница, скроллящийся контейнер
+  и блоки контента внутри него.
+- **Ось 2 — поведение хедера.** Что уезжает, что остаётся и меняется ли вообще
+  заливка навбара.
+
+«Акцентная страница + наезд полотна» и «tertiary + наезд полотна» — это одно
+поведение на разных поверхностях, а не два паттерна.
+
+---
+
+## 2. Ось 1 — уровни поверхностей
+
+Три роли, каждая закрывается токеном:
+
+| Роль | Что это | Обычный токен |
 |---|---|---|
-| `page` | The screen behind everything. Visible around and behind the scrolling content, including the nav bar band. | `surface.tertiary` or `surface.accent` |
-| `scroll` | The scrolling container itself. | `surface.primary` or `surface.secondary` |
-| `block` | Content blocks inside the scroll — cards, rows, feed items. | `surface.primary` |
+| `page` | Фон экрана позади всего. Виден вокруг и позади скроллящегося контента, включая полосу навбара. | `surface.tertiary` или `surface.accent` |
+| `scroll` | Сам скроллящийся контейнер. | `surface.primary` или `surface.secondary` |
+| `block` | Блоки контента внутри скролла — карточки, ряды, элементы ленты. | `surface.primary` |
 
-Three stacks cover everything we have shipped:
+Три стека покрывают всё, что мы уже собрали:
 
-| Stack | page → scroll → block | Where |
+| Стек | page → scroll → block | Где |
 |---|---|---|
-| **Plain** | tertiary → primary → primary | Simple pages: one flat scrolling sheet. |
-| **Feed** | tertiary → secondary → primary | Lists where blocks must read as separate objects against a recessed field. |
-| **Accent** | accent → primary → primary | Promo and section landings. The page level carries brand colour and optional graphics. |
+| **Простой** | tertiary → primary → primary | Простые страницы: одно плоское полотно. |
+| **Фид** | tertiary → secondary → primary | Списки, где блоки должны читаться отдельными объектами на утопленном поле. |
+| **Акцентный** | accent → primary → primary | Промо и лендинги разделов. Уровень страницы несёт брендовый цвет и графику. |
 
-Rule: **`block` is never lower than `scroll`, and `scroll` is never lower than
-`page`.** Levels only go up as you go forward. An inversion means a component
-is on the wrong level, not that the rule needs an exception.
-
----
-
-## 3. Axis 2 — header behaviour
-
-The nav bar is **opaque in every pattern**. What differs is which token fills
-it, and whether that fill ever changes.
-
-### A — Collapsing header
-
-Nav bar is filled with the `scroll` level from the start. Below it, a page
-header (large title, hero card) sits in normal flow and simply scrolls away. A
-functional sub-header — search, tabs, quick actions — pins under the nav bar
-and stays.
-
-- Nav bar fill: `scroll`, constant.
-- Content container: no top radius.
-- **Needs no scroll listener at all.** The title is an ordinary element; the
-  sub-header is `sticky` against a scrollport that already starts below the nav
-  bar. If you find yourself writing scroll maths for pattern A, the layout is
-  wrong.
-- The pinned sub-header keeps its state (selected tab, typed query). It is not
-  a component that gets recreated on pin.
-
-### B1 — Nav bar paints
-
-A photo hero bleeds under the chrome. The nav bar has a **real fill of its
-own**. The hero does not leave: it is **pinned to the top and shrinks** inside a
-fixed-height slot, so the content below scrolls at normal speed.
-
-- Nav bar fill: `transparent → scroll`, and **not interpolated per pixel**. The
-  shipped implementation flips a boolean at a threshold (`(scrollY - 130) / 50`
-  crossing 0.5, i.e. ~155) and lets a 0.2s ease-in-out crossfade do the rest.
-  Copying this as a scroll-linked interpolation is a common misreading.
-- Content container: **no top radius**, and the scroll viewport is full-bleed —
-  the photo has to reach under the status bar.
-- The title, a 0.5pt hairline at `black 8%`, and the loss of the icon scrim
-  (`black 50%`) all land on that same flip, together with the status bar style.
-- This is the only pattern where the nav bar owns a fill at all.
-
-### B3 — Hero fades to the page
-
-Same skeleton as B1 — hero pinned, content layering over it — but the nav bar
-**never gets a fill**. Instead the hero itself lightens toward the page level as
-the content rides up, so by the end of the travel the nav band already reads as
-the page background.
-
-- Nav bar fill: none, ever.
-- Content container: top radius; the scroll viewport is inset below the chrome
-  and carries the same radius.
-- The hero is a layer *outside* the scroll container. It does not move.
-- Title and chrome ink switch at the midpoint of the fade, otherwise light
-  glyphs end up on a light field.
-
-### B2 — Surface overflow
-
-The page level shows through the nav bar band, so the band reads as part of the
-background and **never animates**. The scrolling content is a container with a
-**top radius** that climbs over whatever sits above it (a chip row, an accent
-hero) and slides under the chrome.
-
-- Nav bar fill: `page`, constant.
-- Content container: top radius.
-- The row above is *held* for the first `overlap` px while the container keeps
-  scrolling — that is what produces the overflow. Set `overlap` equal to the
-  held row's height for full coverage.
-- Do **not** implement this with a negative offset at rest: the row must be
-  fully visible at `scrollTop 0`.
+Правило: **`block` никогда не ниже `scroll`, а `scroll` никогда не ниже `page`.**
+Уровни только повышаются по мере приближения к пользователю. Инверсия означает,
+что компонент лежит не на своём уровне, а не что правилу нужно исключение.
 
 ---
 
-## 4. The question that decides the header pattern
+## 3. Ось 2 — поведение хедера
 
-Not "is the hero a photo?" — an accent field with graphics behaves exactly like
-one. The deciding question is narrower:
+Навбар **непрозрачен во всех паттернах**. Различается то, каким токеном он залит
+и меняется ли эта заливка вообще.
 
-> **What covers the nav band by the end of the scroll?**
+### A — Заголовок коллапсит
 
-- **The content container** → B2. It rides up and its own surface fills the
-  band. The nav bar is filled with the page token and never animates. Radius on
-  both the viewport and the surface.
-- **The nav bar's own fill** → B1. The hero has to stay legible under the chrome
-  to the very last pixel, so the bar paints itself. No radius, full-bleed
-  viewport.
-- **The hero, by becoming the page colour** → B3. The bar stays unfilled and the
-  hero fades out under it. Radius, inset viewport.
+Навбар залит уровнем `scroll` с самого начала. Под ним заголовок страницы
+(крупный тайтл, hero-карточка) лежит обычным элементом в потоке и просто
+уезжает. Функциональный подхедер — поиск, табы, быстрые действия — пиннится под
+навбаром и остаётся.
 
-B1 and B3 are the same mechanic — pinned hero, content layering over it — and
-they diverge on this one decision. Filing them under different "patterns"
-because one has a photo and one has a promo image hides the fact that only the
-nav-band treatment differs.
+- Заливка навбара: `scroll`, постоянная.
+- Полотно контента: без скругления сверху.
+- **Скролл-листенер не нужен вообще.** Заголовок — обычный элемент, подхедер —
+  `sticky` к верху скроллпорта, который и так начинается под навбаром. Если под
+  паттерн A пишется скролл-математика, свёрстано неправильно.
+- Придержанный подхедер сохраняет состояние: выбранный таб, набранный запрос.
+  Это не компонент, который пересоздаётся при пине.
+
+### B2 — Полотно наезжает
+
+Уровень страницы проступает в полосе навбара, поэтому полоса читается как часть
+фона и **не анимируется**. Скроллящийся контент — контейнер со **скруглением
+сверху**, который наезжает на то, что лежит выше (ряд чипсов, акцентный hero), и
+уходит под хром.
+
+- Заливка навбара: `page`, постоянная.
+- Полотно контента: скругление сверху.
+- Ряд над полотном **придерживается** первые `overlap` px, пока полотно
+  скроллится обычным образом — именно эта разница и даёт наезд. Чтобы ряд
+  закрылся целиком, `overlap` должен равняться его высоте.
+- **Не делать** это отрицательным отступом в покое: при `scrollTop 0` ряд обязан
+  быть виден полностью.
+
+### B1 — Навбар закрашивается
+
+Фото-hero подлезает под хром. У навбара есть **своя заливка**. Hero не уезжает:
+он **приколот к верху и сжимается** внутри слота фиксированной высоты, поэтому
+контент под ним скроллится с обычной скоростью.
+
+- Заливка навбара: `transparent → scroll`, и **не интерполируется по пикселям**.
+  В собранной реализации это булев флип на пороге (`(scrollY - 130) / 50`
+  переходит 0.5, то есть ~155), а плавность доигрывает переход 0.2s ease-in-out.
+  Читать это как привязку к скроллу — типичная ошибка.
+- Полотно контента: **без скругления**, а скроллпорт во весь экран — фото обязано
+  доходить под статус-бар.
+- Заголовок, хайрлайн 0.5pt `black 8%` и исчезновение подложки под глифами
+  (`black 50%`) садятся на тот же флип, вместе со стилем статус-бара.
+- Единственный паттерн, где у навбара вообще есть своя заливка.
+
+### B3 — Hero осветляется до фона
+
+Скелет тот же, что у B1 — hero приколот, контент наслаивается поверх, — но
+навбар **не получает заливки никогда**. Вместо этого сам hero по мере наезда
+осветляется до уровня страницы, так что к концу пути в полосе навбара уже
+читается фон.
+
+- Заливка навбара: нет и не будет.
+- Полотно контента: скругление сверху; скроллпорт начинается под хромом и несёт
+  то же скругление.
+- Hero — слой *вне* скроллящегося контейнера. Он не двигается.
+- Заголовок и чернила хрома переключаются на середине осветления, иначе светлые
+  глифы окажутся на светлом поле.
 
 ---
 
-## 5. What is actually built
+## 4. Вопрос, который выбирает паттерн хедера
 
-Before treating any of this as a spec, check which half of it exists. The four
-cases written up in the original header-transition doc do not map one-to-one
-onto the app:
+Не «фото там или нет» — акцентное поле с графикой ведёт себя точно так же.
+Вопрос уже:
 
-| Case as documented | In the app |
+> **Чем закрыта полоса навбара к концу скролла?**
+
+- **Полотном контента** → B2. Оно наезжает и закрывает полосу своей же
+  поверхностью. Навбар залит токеном страницы и не анимируется. Скругление — и
+  на вьюпорте, и на полотне.
+- **Собственной заливкой навбара** → B1. Hero обязан оставаться читаемым под
+  хромом до последнего пикселя, поэтому полоса красит себя сама. Скругления нет,
+  скроллпорт во весь экран.
+- **Самим hero, который стал цветом фона** → B3. Полоса без заливки, hero гаснет
+  под ней. Скругление есть, скроллпорт под хромом.
+
+B1 и B3 — **одна механика**: hero приколот, контент наслаивается поверх.
+Расходятся они ровно в этом решении. Разводить их по разным «паттернам» на том
+основании, что в одном фото, а в другом промо-картинка, — значит спрятать тот
+факт, что различается только обработка полосы навбара.
+
+---
+
+## 5. Что из этого реально собрано
+
+Прежде чем считать это спекой, стоит проверить, какая половина существует. Четыре
+кейса из исходной доки про хедер-транзишены не ложатся на приложение один в один:
+
+| Кейс как описан | В приложении |
 |---|---|
-| Collapsing title on the market feed, sticky search + `Fresh / New / Used` tabs | **No.** There is no collapsing title and no such tabs — the string `Fresh` does not exist in the codebase. What is built is a **pinned filter-chip row** (68pt) with the feed surface riding over it. |
-| Object card / My cars: title + photo + 360 badge collapse, sticky `Get help / Car care` | **No sticky block.** Those two are rows inside a menu sheet. The garage hero is pinned and shrinks with a fade. |
-| Promo / section landing (Travel) | **Design only** — the Figma flow exists, the screen does not. |
-| Listing card | **Yes** — this is the one case shipped as documented. |
+| Коллапс заголовка на ленте маркета, sticky поиск + табы `Fresh / New / Used` | **Нет.** Ни коллапса заголовка, ни этих табов — строки `Fresh` в коде не существует. Собран **придержанный ряд чипсов фильтров** (68pt), на который наезжает полотно ленты. |
+| Карточка объекта / My cars: коллапсят заголовок, фото и 360-бейдж, sticky остаётся `Get help / Car care` | **Sticky-блока нет.** Это строки внутри меню-шита. Hero гаража приколот и уменьшается с затуханием. |
+| Промо-лендинг раздела (Travel) | **Только дизайн** — флоу в Figma есть, экрана нет. |
+| Карточка объявления | **Да** — единственный кейс, собранный так, как описан. |
 
-Anything marked "no" is design intent, not a described implementation. Handing
-it over as-is sends a developer looking for controls that were never built.
+Всё, что помечено «нет», — это дизайн-интент, а не описание реализации. Отдать
+это в разработку как есть — отправить разработчика искать контролы, которых
+никогда не было.
 
-## 6. Legal combinations
+## 6. Допустимые сочетания
 
-| | B2 — overflow | B1 — nav paints | B3 — hero fades |
+| | B2 — наезд | B1 — навбар красится | B3 — hero гаснет |
 |---|---|---|---|
-| Plain (tertiary → primary) | ✅ | ✅ | ✅ |
-| Feed (tertiary → secondary) | ✅ | ⚠️ only with a photo hero; secondary under a painted bar reads as a mistake | ⚠️ the fade has to land exactly on the page token, or the seam shows |
-| Accent (accent → primary) | ✅ the intended use | ❌ an accent hero needs no scrim | ✅ |
+| Простой (tertiary → primary) | ✅ | ✅ | ✅ |
+| Фид (tertiary → secondary) | ✅ | ⚠️ только с фото-hero; secondary под закрашенной полосой читается как ошибка | ⚠️ осветление обязано попасть точно в токен страницы, иначе видно стык |
+| Акцентный (accent → primary) | ✅ штатное применение | ❌ акцентному hero не нужна подложка | ✅ |
 
 ---
 
-## 7. Tokens
+## 7. Токены
 
-| Token | Note |
+| Токен | Примечание |
 |---|---|
-| `navbar.height` | 56. A token, never a literal in a screen. |
-| `statusbar.height` | Read from the safe-area inset. Never hardcode; it varies per device. |
-| `surface.page` / `surface.primary` / `surface.secondary` / `surface.tertiary` / `surface.accent` | Axis 1. In B2 the page token *is* the nav bar colour — no separate `navbar.background.solid` is needed. |
-| `content.radius.top` | Top radius of the overflowing container. It must be applied in **two** places: on the scroll viewport (so content sliding under the nav bar keeps a rounded corner instead of a straight seam) and on the surface itself (so its own top rides over whatever is above it). Applying it only to the surface is the single most common mistake — the rounding then disappears the moment scrolling starts. |
-| `scroll.overlap` | How far the container climbs over the row above it (B2). Equal to that row's height. |
-| `scroll.stickyOffset` | = `navbar.height`. Anchor for pinned sub-headers (A). |
-| `navbar.paint.start` / `navbar.paint.distance` | The fill window (B1). Derived per screen from the hero height — parameterised, never a literal. |
+| `navbar.height` | 56. Токен, а не литерал на экране. |
+| `statusbar.height` | Берётся из safe-area inset. Не хардкодить: зависит от устройства. |
+| `surface.page` / `surface.primary` / `surface.secondary` / `surface.tertiary` / `surface.accent` | Ось 1. В B2 токен страницы *и есть* цвет навбара — отдельный `navbar.background.solid` не нужен. |
+| `content.radius.top` | Скругление верха наезжающего контейнера. Вешается в **двух** местах: на скроллпорт (чтобы контент, уходящий под навбар, сохранял скруглённый угол, а не давал прямой стык) и на само полотно (чтобы его верх наезжал на то, что выше). Повесить только на полотно — самая частая ошибка: скругление исчезает в момент начала скролла. |
+| `scroll.overlap` | Насколько контейнер наезжает на ряд над ним (B2). Равен высоте этого ряда. |
+| `scroll.stickyOffset` | = `navbar.height`. Точка привязки придержанных подхедеров (A). |
+| `navbar.paint.start` / `navbar.paint.distance` | Окно заливки (B1). Считается от высоты hero конкретного экрана — параметр, не литерал. |
 
-Reference values measured on the iOS implementation: `overlap 68`
-(= 44 chip + 2×12), paint window `start 130 / distance 50`, hero `300`,
-promo hero `480`, home indicator `134×5 r2.5`.
+Замеренные значения из iOS-реализации: `overlap 68` (= чип 44 + 2×12), окно
+заливки `start 130 / distance 50`, hero `300`, промо-hero `480`, home indicator
+`134×5 r2.5`.
 
-**Unresolved:** the radius token reads `32` in the design file
-(`radius/xl` on `Content`), while the shipped code uses `20` in the feed and the
-listing card and `24` in the garage. Three values for one rule — either the app
-is stale or the rule is. Note also that at board level the variable dump reports
-`xl = 24`, which is the *spacing* collection; the radius `xl` is `32`. One name,
-two values, and a handoff that picks the wrong one.
-
----
-
-## 8. What the stand cannot tell you
-
-The stand is honest about surfaces, thresholds, vocabulary and the B1/B2 split.
-Four things do not transfer from a browser and must be decided on device:
-
-1. **Gesture arbitration.** A horizontally scrolling pinned row inside a
-   vertical scroll needs an explicit contract, or pull-to-refresh attaches to
-   the wrong recogniser and dies.
-2. **Rubber-banding / overscroll.** Whether the hero stretches on overscroll is
-   a per-pattern decision and looks nothing like a browser's.
-3. **Pull-to-refresh** placement relative to an overflowing container.
-4. **Momentum and interruptibility.** Every threshold must survive a fast
-   flick, and reverse symmetrically.
+**Не решено:** токен радиуса в файле дизайна читается как `32` (`radius/xl` на
+`Content`), а в коде живут `20` (лента, карточка объявления) и `24` (гараж). Три
+значения на одно правило — либо приложение отстало, либо правило. Отдельная
+ловушка: на уровне борда дамп переменных отдаёт `xl = 24` — это коллекция
+спейсингов, тогда как радиусный `xl` равен `32`. Одно имя, два значения, и
+хендофф, который возьмёт не то.
 
 ---
 
-## 9. QA checklist
+## 8. Чего стенд не покажет
 
-- [ ] Nav bar does not jump on a fast flick — thresholds are interpolated, not
-      switched.
-- [ ] Every transition is reversible: scrolling back up retraces it exactly.
-- [ ] Status bar style flips with the fill (B1) or with the container covering
-      the hero (B2) — not on a timer.
-- [ ] At `scrollTop 0` in B2, the held row is fully visible.
-- [ ] The container's top radius is not clipped oddly by the notch as it slides
-      under the chrome.
-- [ ] Pinned sub-header does not teleport into place (A).
-- [ ] Pinned sub-header keeps its state across pinning (A).
-- [ ] The radius survives scrolling — it is on the viewport, not only on the
-      surface. A straight seam under the nav bar the moment you scroll means it
-      was applied in one place instead of two.
-- [ ] The surface clips its own children: the first content block must not paint
-      over the rounded top.
-- [ ] Overscroll never exposes a foreign surface level at either end.
-- [ ] The nav bar has no border and does not cut the page background — graphics
-      on the page level run behind the status bar.
-- [ ] Short content — less than one viewport — leaves the header in a valid end
-      state, not half-animated.
-- [ ] Last row clears the home indicator.
-- [ ] Pinned elements do not break the VoiceOver / TalkBack focus order.
-- [ ] Icon contrast passes WCAG AA in *both* chrome states.
+Стенд честен насчёт поверхностей, порогов, словаря и разницы между B1, B2 и B3.
+Четыре вещи из браузера не переносятся и решаются только на устройстве:
+
+1. **Арбитраж жестов.** Горизонтально скроллящийся придержанный ряд внутри
+   вертикального скролла требует явного контракта, иначе pull-to-refresh
+   цепляется не к тому распознавателю и умирает.
+2. **Rubber-band и overscroll.** Растягивается ли hero на overscroll — решение
+   на каждый паттерн, и в браузере оно выглядит совсем иначе.
+3. **Pull-to-refresh** относительно наезжающего полотна.
+4. **Инерция и прерываемость.** Каждый порог обязан выживать на резком флике и
+   отыгрывать симметрично назад.
 
 ---
 
-## 10. Open questions
+## 9. Чек-лист приёмки
 
-- Does the hero stretch on pull-down (the listing card grows its photo; nothing
-  else does), and should that be system-wide?
-- Does the pinned sub-header get a shadow or a hairline, and does it appear at
-  `scrollTop > 0` or on pin?
-- Scroll-driven with no easing, or a short eased settle after the gesture ends?
+- [ ] Навбар не дёргается на резком флике: порог переключается один раз и
+      доигрывает переход, а не мигает туда-обратно.
+- [ ] Любой переход обратим: скролл вверх повторяет путь ровно назад.
+- [ ] Стиль статус-бара переключается вместе с заливкой (B1), с осветлением
+      hero (B3) или с наездом полотна (B2), а не по таймеру.
+- [ ] При `scrollTop 0` в B2 придержанный ряд виден полностью.
+- [ ] Скругление верха контейнера не срезается вырезом, когда контейнер уходит
+      под хром.
+- [ ] Придержанный подхедер не телепортируется в позицию (A).
+- [ ] Придержанный подхедер сохраняет состояние при пине (A).
+- [ ] Скругление переживает скролл: оно на вьюпорте, а не только на полотне.
+      Прямой стык под навбаром сразу после начала скролла означает, что радиус
+      повесили в одном месте вместо двух.
+- [ ] Полотно клипает своих детей: первый блок контента не закрашивает
+      скруглённый верх.
+- [ ] Overscroll ни на одном из пределов не обнажает чужой уровень поверхности.
+- [ ] У навбара нет границы и он не обрезает фон страницы: графика уровня
+      страницы уходит за статус-бар.
+- [ ] Короткий контент — меньше вьюпорта — оставляет хедер в валидном конечном
+      состоянии, а не в половине анимации.
+- [ ] Последний ряд не перекрыт home indicator.
+- [ ] Придержанные элементы не ломают порядок фокуса VoiceOver / TalkBack.
+- [ ] Контраст иконок проходит WCAG AA в **обоих** состояниях хрома.
+
+---
+
+## 10. Открытые вопросы
+
+- Растягивается ли hero на пул-дауне (в карточке объявления фото растёт, больше
+  нигде) и должно ли это стать системным правилом?
+- Нужен ли придержанному подхедеру шэдоу или хайрлайн, и появляется он при
+  `scrollTop > 0` или сразу при пине?
+- Полностью scroll-driven без easing или короткая доводка после отпускания?
