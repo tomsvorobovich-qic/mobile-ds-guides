@@ -32,9 +32,10 @@
         <button class="pick" type="button" data-pick="feed">Feed <span class="pick__hint">наезд 68</span></button>
         <button class="pick" type="button" data-pick="accent">Accent</button>
 
-        <button class="group" type="button" data-group="hero">Hero приколот <span class="group__count">2 рядом</span></button>
+        <button class="group" type="button" data-group="hero">Hero приколот <span class="group__count">3 рядом</span></button>
         <button class="pick" type="button" data-pick="paint">Paint <span class="pick__hint">порог 155</span></button>
         <button class="pick" type="button" data-pick="promo">Dissolve <span class="pick__hint">hero 480</span></button>
+        <button class="pick" type="button" data-pick="pinned">Pinned hero <span class="pick__hint">общий</span></button>
 
         <button class="group" type="button" data-group="other">Прочее <span class="group__count">1</span></button>
         <button class="pick" type="button" data-pick="collapse">Collapse <span class="pick__hint">порог 52</span></button>
@@ -57,6 +58,21 @@
           <input type="checkbox" data-toggle="sync" checked>
           <span class="switch__track"></span>
         </label>
+      </div>
+
+      <div class="panel panel--pad" data-params hidden>
+        <p class="panel__label">Параметры hero</p>
+        <label class="range">
+          <span>Высота <b data-param-out>420pt</b></span>
+          <input type="range" min="240" max="620" step="10" value="420" data-param="height">
+        </label>
+        <label class="switch">
+          <span>Графика вместо фото</span>
+          <input type="checkbox" data-param="graphic">
+          <span class="switch__track"></span>
+        </label>
+        <p class="panel__note">В проде это не константы: дизайнер задаёт графику и высоту
+          контейнера, механика от этого не меняется.</p>
       </div>
     </aside>
 
@@ -327,6 +343,69 @@
             <dl class="numbers" data-numbers></dl>
           </div>
           <p class="sample__where">Где живёт: Промо-лендинг — в приложении не собран, механика проверена в гараже.</p>
+          <div class="sample__readout"></div>
+        </div>
+      </section>
+
+      <section class="sample sample--pinned" data-sample="pinned" data-group="hero" style="--level-scroll: var(--bg-secondary)">
+        <div class="sample__stage">
+          <div class="device-slot">
+            <div class="device" data-pattern="pinned">
+              <div class="device__screen">
+                <div class="screen__bg">
+                  <div class="pin-hero" data-hero>
+                    <div class="pin-hero__art"><i></i><i></i></div>
+                    <div class="promo-caption"><i></i><i></i></div>
+                  </div>
+                </div>
+                <div class="screen__scroll">
+                  <div class="pin-space" data-hero-space></div>
+                  <div class="surface"><div class="blocks" data-blocks="6"></div></div>
+                </div>
+                <div class="chrome chrome--over">
+                  <span class="navbar-scrim navbar-scrim--leading"></span>
+                  <span class="navbar-scrim navbar-scrim--trailing"></span>
+                  <div class="statusbar"></div>
+                  <div class="navbar"></div>
+                  <span class="navbar-title"></span>
+                </div>
+                <div class="home"></div>
+              </div>
+              <div class="device__frame"></div>
+            </div>
+          </div>
+        </div>
+        <div class="sample__info">
+          <h2 class="sample__name">Pinned hero <span class="sample__badge">объединяет Paint и Dissolve</span></h2>
+          <p class="sample__sub">tertiary + гаснущий слой</p>
+          <p class="sample__use"><b>Берите, если</b> верх приколот — фото это или графика,
+            паттерну всё равно.</p>
+          <p class="sample__ctx">Один паттерн вместо двух: заливка навбара из Paint не нужна, потому
+            что под погасшим hero остаётся фон страницы. Высота и содержимое hero — параметры экрана,
+            их задаёт дизайнер; механика одна на все случаи.</p>
+          <p class="sample__how">Фон страницы всегда tertiary, hero гаснет к стыку — навбару заливка
+            не нужна.</p>
+          <div class="detail">
+            <p class="detail__label">Слои</p>
+            <div class="layers" data-layers></div>
+          </div>
+          <div class="detail">
+            <p class="detail__label">Что делает скролл</p>
+            <ol class="steps">
+              <li>Фон страницы — <code>tertiary</code>, он лежит под всем и никогда не меняется.</li>
+              <li>Hero стоит слоем поверх фона, вне скролла: он не едет, а гаснет.</li>
+              <li>Контент наслаивается скруглённым контейнером и уходит под хром.</li>
+              <li>Прозрачность доходит до нуля ровно тогда, когда верх контейнера дошёл до нижней
+                кромки навбара — дальше в полосе фон страницы.</li>
+              <li>Заливка навбару не нужна ни на одном кадре; меняется только тинт глифов, флип 0.2s.</li>
+            </ol>
+          </div>
+          <div class="detail">
+            <p class="detail__label">Числа</p>
+            <dl class="numbers" data-numbers></dl>
+          </div>
+          <p class="sample__where">Где живёт: обобщение карточки объявления и промо-лендинга — одна
+            механика, разная графика и высота.</p>
           <div class="sample__readout"></div>
         </div>
       </section>

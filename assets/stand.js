@@ -96,6 +96,10 @@ document.querySelectorAll('.device').forEach((device) => {
       const sp = device.querySelector('.promo-space');
       return sp ? { at: sp.offsetHeight, label: `конец осветления — ${sp.offsetHeight}` } : null;
     }
+    if (device.dataset.pattern === 'pinned') {
+      const sp = device.querySelector('[data-hero-space]');
+      return sp ? { at: sp.offsetHeight, label: `конец гашения — ${sp.offsetHeight}` } : null;
+    }
     if (device.dataset.pattern === 'collapse') {
       const ti = device.querySelector('.pagetitle');
       const at = ti ? Math.round(ti.offsetTop + ti.offsetHeight) : 0;
@@ -111,7 +115,6 @@ document.querySelectorAll('.device').forEach((device) => {
      загрузке: у спрятанного сэмпла offsetHeight нулевой, и высоты hero и
      заголовка вышли бы нулями. */
   const root = getComputedStyle(document.documentElement);
-  let described = false;
 
   /* Кастомное свойство приходит уже подставленным — `var(--bg-secondary)`
      превращается в hex, — поэтому имя токена ищется обратным поиском по
@@ -125,11 +128,9 @@ document.querySelectorAll('.device').forEach((device) => {
   };
 
   const describe = () => {
-    if (described) return;
-    described = true;
-
     const layers = sample.querySelector('[data-layers]');
     if (layers) {
+      layers.innerHTML = '';
       const roles = [['--level-page', 'страница'], ['--level-scroll', 'полотно'], ['--level-block', 'карточка']];
       const seen = new Set();
       roles.forEach(([prop, role]) => {
@@ -149,6 +150,7 @@ document.querySelectorAll('.device').forEach((device) => {
 
     const numbers = sample.querySelector('[data-numbers]');
     if (numbers) {
+      numbers.innerHTML = '';
       /* --chrome-h объявлен через calc() и подставленным не приходит —
          складывается из тех же двух слагаемых. */
       const rows = [
@@ -159,6 +161,7 @@ document.querySelectorAll('.device').forEach((device) => {
       if (device.querySelector('.hero-space')) rows.push(['акцентная зона', `${num('--hero-h')}pt`]);
       if (device.dataset.pattern === 'paint') rows.push(['высота фото', `${num('--photo-h')}pt`]);
       if (device.dataset.pattern === 'promo') rows.push(['hero', `${num('--promo-hero-h')}pt`]);
+      if (device.dataset.pattern === 'pinned') rows.push(['hero (параметр)', `${num('--pin-hero-h')}pt`]);
 
       /* Порог — та же величина, по которой паттерн живёт на экране. */
       const th = threshold();
@@ -214,13 +217,13 @@ document.querySelectorAll('.device').forEach((device) => {
        не двигается. Контент наслаивается поверх, а hero параллельно
        осветляется, так что к концу наезда в полосе навбара уже фон
        страницы. Диапазон — путь карточки до нижней кромки навбара. */
-    if (pattern === 'promo') {
-      const space = device.querySelector('.promo-space');
+    if (pattern === 'promo' || pattern === 'pinned') {
+      const space = device.querySelector('[data-hero-space], .promo-space');
       const span = space ? space.offsetHeight : 0;
       const progress = span > 0 ? Math.min(1, Math.max(0, y / span)) : 0;
       device.style.setProperty('--progress', progress.toFixed(3));
       device.classList.toggle('is-scrolled', progress > 0.5);
-      parts.push(['осветление', progress.toFixed(2)]);
+      parts.push([pattern === 'pinned' ? 'гашение hero' : 'осветление', progress.toFixed(2)]);
     }
 
     /* Collapse: сам коллапс скрипта не требует — заголовок уезжает как
@@ -283,6 +286,7 @@ const picks = [...document.querySelectorAll('[data-pick]')];
 const groups = [...document.querySelectorAll('[data-group]')].filter((el) => el.tagName === 'BUTTON');
 const samples = [...document.querySelectorAll('[data-sample]')];
 const groupIds = new Set(samples.map((s) => s.dataset.group));
+const params = document.querySelector('[data-params]');
 const fallback = groups[0].dataset.group;
 
 function select(id) {
@@ -304,6 +308,10 @@ function select(id) {
     g.setAttribute('aria-current', String(g.dataset.group === id));
     g.toggleAttribute('data-within', !groupIds.has(id) && g.dataset.group === openGroup);
   });
+
+  /* Панель параметров относится к паттерну, а не к стенду: она есть, только
+     когда на сцене есть экран, у которого эти параметры вообще есть. */
+  params.hidden = !shown.some((s) => s.querySelector('[data-hero]'));
 
   fitScale();
   shown.forEach((s) => refresh.get(s.dataset.sample)?.());
@@ -350,6 +358,28 @@ function fitScale() {
 
   stage.style.setProperty('--scale', scale.toFixed(3));
 }
+
+/* ---- параметры приколотого hero ----
+   Высота и содержимое — то, что в проде настраивает дизайнер, поэтому они
+   регуляторы, а не константы. Механика на них не смотрит: гашение считается
+   от распорки, распорка — от высоты. */
+const heightInput = document.querySelector('[data-param="height"]');
+const graphicInput = document.querySelector('[data-param="graphic"]');
+const paramOut = document.querySelector('[data-param-out]');
+const pinnedSample = document.querySelector('[data-sample="pinned"]');
+
+function applyParams() {
+  if (!pinnedSample) return;
+  pinnedSample.style.setProperty('--pin-hero-h', `${heightInput.value}px`);
+  paramOut.textContent = `${heightInput.value}pt`;
+  pinnedSample.querySelector('[data-hero]')
+    .classList.toggle('pin-hero--graphic', graphicInput.checked);
+  refresh.get('pinned')?.();
+}
+
+heightInput?.addEventListener('input', applyParams);
+graphicInput?.addEventListener('change', applyParams);
+applyParams();
 
 ready = true;
 select(location.hash.slice(1));

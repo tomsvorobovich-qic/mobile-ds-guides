@@ -311,6 +311,41 @@ html, body { margin: 0; background: #09090b; }
 
 .switch input:focus-visible + .switch__track { outline: 2px solid var(--ui-accent); outline-offset: 2px; }
 
+/* ползунок: трек 4px, палец 14 — та же геометрия, что у switch */
+.range {
+  display: block;
+  padding: 6px 0 2px;
+  font-size: 13px;
+  color: var(--ui-muted);
+  cursor: pointer;
+}
+
+.range b {
+  font: 12px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-weight: 400;
+  color: var(--ui-fg);
+}
+
+.range input {
+  width: 100%;
+  margin: 10px 0 0;
+  appearance: none;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--ui-border-strong);
+}
+
+.range input::-webkit-slider-thumb {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  background: var(--ui-accent);
+  cursor: pointer;
+}
+
+.range input:focus-visible { outline: 2px solid var(--ui-accent); outline-offset: 4px; }
+
 /* ---------- сцена ---------- */
 
 /* Силуэт контента в рентгене выше самого экрана и в обычном режиме тоже
@@ -328,9 +363,13 @@ html, body { margin: 0; background: #09090b; }
    Невыбранные сэмплы остаются в разметке: их скролл и замеры живые. */
 .sample { display: none; }
 
+/* Колонки равные и заданные сеткой, а не содержимым: у подписей разная
+   длина, и на flex самый разговорчивый паттерн растягивал свою колонку —
+   мокапы переставали стоять в ряд. */
 .stage[data-mode="compare"] {
-  display: flex;
-  align-items: flex-start;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
   gap: 24px;
 }
 
@@ -340,6 +379,15 @@ html, body { margin: 0; background: #09090b; }
   gap: 14px;
   min-width: 0;
 }
+
+/* Замеры прижаты к низу колонки: подписи разной длины, и без этого строка
+   плиток гуляла по вертикали от паттерна к паттерну. */
+.stage[data-mode="compare"] .sample__info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
 
 /* В ряду читается разница, а не проза: правило выбора, контекст группы и
    разбор механики остаются фокусу, в подписи — одна строка. */
@@ -356,7 +404,7 @@ html, body { margin: 0; background: #09090b; }
 .stage[data-mode="compare"] .sample__how { margin-bottom: 0; font-size: 12px; }
 
 .stage[data-mode="compare"] .sample__readout {
-  margin-top: 12px;
+  margin-top: auto;
   padding-top: 12px;
   gap: 6px;
 }
@@ -975,6 +1023,62 @@ html, body { margin: 0; background: #09090b; }
    радиус выше низа hero — тот же статический наезд, что и в гараже. */
 .promo-space {
   height: calc(var(--promo-hero-h) - var(--chrome-h) - var(--radius-xl));
+  pointer-events: none;
+}
+
+/* ==================================================================
+   Приколотый hero — общий паттерн
+   Обобщение Paint и Dissolve. Фон страницы всегда tertiary; hero стоит
+   слоем поверх него, вне скролла, и по скроллу гаснет. К моменту, когда
+   верх контейнера дошёл до нижней кромки навбара, в полосе уже фон
+   страницы — заливка навбару не нужна ни на одном кадре, меняется только
+   тинт глифов. Высота и содержимое hero — параметры экрана, не константы
+   системы: в проде их задаёт дизайнер.
+   ================================================================== */
+
+.sample--pinned { --pin-hero-h: 420px; }
+
+.pin-hero {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--pin-hero-h);
+  background: linear-gradient(160deg, #8d90b8, #4b4d70 52%, #26273c);
+  /* Гаснет слой, а не едет: под ним фон страницы, поэтому и получается
+     полоса навбара без собственной заливки. */
+  opacity: calc(1 - var(--progress, 0));
+}
+
+.pin-hero::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 40%;
+  background: linear-gradient(rgba(12, 14, 20, 0), rgba(12, 14, 20, 0.55));
+}
+
+/* Второе содержимое того же слоя: дизайнер ставит графику вместо фото,
+   механика не замечает разницы. */
+.pin-hero--graphic { background: var(--bg-brand); }
+.pin-hero--graphic::after { display: none; }
+.pin-hero--graphic .pin-hero__art { display: block; }
+
+.pin-hero__art { display: none; }
+
+.pin-hero__art i {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.pin-hero__art i:nth-child(1) { width: 320px; height: 320px; right: -110px; top: 90px; }
+.pin-hero__art i:nth-child(2) { width: 190px; height: 190px; left: -70px; top: 260px; }
+
+.pin-hero--graphic .promo-caption i { background: rgba(255, 255, 255, 0.5); }
+
+.pin-space {
+  height: calc(var(--pin-hero-h) - var(--chrome-h) - var(--radius-xl));
   pointer-events: none;
 }
 
