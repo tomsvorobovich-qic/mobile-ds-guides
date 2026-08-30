@@ -10,243 +10,387 @@
 <div class="board">
 
   <div class="board__head">
-    <h1 class="board__title">Хедер и поверхности</h1>
-    <p class="board__lede">Паттерны хедера отличаются одним: чем закрыта полоса навбара,
-      когда экран прокручен. Экраны живые — их можно скроллить.</p>
-    <p class="board__links"><a href="../">Оглавление</a> · <a href="../guides/scroll-patterns.html">Гайд</a></p>
-  </div>
-
-  <div class="board__controls">
-    <label><input type="checkbox" data-toggle="sync" checked> синхронный скролл</label>
-    <label><input type="checkbox" data-toggle="debug"> границы слоёв</label>
-    <label><input type="checkbox" data-toggle="xray"> что за рамкой</label>
-  </div>
-
-  <div class="board__section">
-    <h2>Overflow</h2>
-    <p>Полосу закрывает само полотно контента: оно наезжает скруглённым верхом и уходит под
-      хром. Навбар залит фоном страницы и не меняется. Ниже — один паттерн на трёх стеках
-      поверхностей.</p>
-  </div>
-
-  <div class="board__row">
-
-    <div class="sample">
-      <div class="sample__head">
-        <h3 class="sample__name">Plain</h3>
-        <p class="sample__sub">tertiary → primary</p>
-        <p class="sample__use"><b>Берите, если</b> на экране одно плоское полотно: текст, простой список, детали.</p>
-      </div>
-<div class="device-slot">
-        <div class="device">
-          <div class="device__screen">
-            <div class="screen__bg"></div>
-            <div class="screen__scroll">
-              <div class="surface"><div class="plain"></div></div>
-            </div>
-            <div class="chrome">
-              <div class="statusbar"></div>
-              <div class="navbar"></div>
-            </div>
-            <div class="home"></div>
-          </div>
-          <div class="device__frame"></div>
-        </div>
-      </div>
-      <p class="sample__how">Полотно стоит под навбаром и уходит под него скруглённым верхом.</p>
-      <div class="sample__readout"></div>
+    <div>
+      <h1 class="board__title">Хедер и поверхности</h1>
+      <p class="board__lede">Паттерны отличаются одним: чем закрыта полоса навбара, когда экран
+        прокручен. Экраны живые — их можно скроллить.</p>
     </div>
-
-
-    <div class="sample" style="--level-scroll: var(--bg-secondary)">
-      <div class="sample__head">
-        <h3 class="sample__name">Feed</h3>
-        <p class="sample__sub">tertiary → secondary → primary</p>
-        <p class="sample__use"><b>Берите, если</b> элементы должны читаться отдельными карточками на утопленном поле.</p>
-      </div>
-<div class="device-slot">
-        <div class="device">
-          <div class="device__screen">
-            <div class="screen__bg"></div>
-            <div class="screen__scroll">
-              <div class="filterbar" data-pin><i></i><i></i><i></i><i></i><i></i></div>
-              <div class="surface surface--rides"><div class="blocks" data-blocks="6"></div></div>
-            </div>
-            <div class="chrome">
-              <div class="statusbar"></div>
-              <div class="navbar"></div>
-            </div>
-            <div class="home"></div>
-          </div>
-          <div class="device__frame"></div>
-        </div>
-      </div>
-      <p class="sample__how">Ряд фильтров придерживается 68pt — ровно на эту разницу полотно и наезжает.</p>
-      <div class="sample__readout"></div>
-    </div>
-
-
-    <div class="sample" style="--level-page: var(--bg-brand); --level-scroll: var(--bg-secondary)">
-      <div class="sample__head">
-        <h3 class="sample__name">Accent</h3>
-        <p class="sample__sub">accent → primary</p>
-        <p class="sample__use"><b>Берите, если</b> разделу нужен брендовый верх с графикой.</p>
-      </div>
-<div class="device-slot">
-        <div class="device">
-          <div class="device__screen">
-            <div class="screen__bg">
-              <div class="screen__graphic screen__graphic--a"></div>
-              <div class="screen__graphic screen__graphic--b"></div>
-            </div>
-            <div class="screen__scroll">
-              <div class="hero-space"></div>
-              <div class="surface surface--over-hero"><div class="blocks" data-blocks="6"></div></div>
-            </div>
-            <div class="chrome chrome--over">
-              <div class="statusbar"></div>
-              <div class="navbar"></div>
-            </div>
-            <div class="home"></div>
-          </div>
-          <div class="device__frame"></div>
-        </div>
-      </div>
-      <p class="sample__how">Графика лежит на фоновом слое и не обрезается навбаром. Наезд статический, равен радиусу.</p>
-      <div class="sample__readout"></div>
-    </div>
-
+    <nav class="board__links">
+      <a href="../">Оглавление</a>
+      <a href="../guides/scroll-patterns.html">Гайд</a>
+    </nav>
   </div>
 
-  <div class="board__section">
-    <h2>Paint и Dissolve</h2>
-    <p>В обоих hero приколот к верху и никуда не уезжает. Расходятся они только в том, чем
-      закрыта полоса навбара.</p>
-  </div>
+  <div class="stand">
 
-  <div class="board__row">
+    <aside class="rail">
+      <div class="panel">
+        <p class="panel__label">Паттерн</p>
 
-    <div class="sample" style="--level-scroll: var(--bg-secondary); --level-page: var(--bg-secondary)">
-      <div class="sample__head">
-        <h3 class="sample__name">Paint</h3>
-        <p class="sample__sub">карточка объявления</p>
-        <p class="sample__use"><b>Берите, если</b> под хромом фото и оно должно быть видно до верхнего края.</p>
+        <button class="group" type="button" data-group="overflow">Overflow <span class="group__count">3 рядом</span></button>
+        <button class="pick" type="button" data-pick="plain">Plain</button>
+        <button class="pick" type="button" data-pick="feed">Feed <span class="pick__hint">наезд 68</span></button>
+        <button class="pick" type="button" data-pick="accent">Accent</button>
+
+        <button class="group" type="button" data-group="hero">Hero приколот <span class="group__count">2 рядом</span></button>
+        <button class="pick" type="button" data-pick="paint">Paint <span class="pick__hint">порог 155</span></button>
+        <button class="pick" type="button" data-pick="promo">Dissolve <span class="pick__hint">hero 480</span></button>
+
+        <button class="group" type="button" data-group="other">Прочее <span class="group__count">1</span></button>
+        <button class="pick" type="button" data-pick="collapse">Collapse <span class="pick__hint">порог 52</span></button>
       </div>
-<div class="device-slot">
-        <div class="device" data-pattern="paint">
-          <div class="device__screen">
-            <div class="screen__bg"></div>
-            <div class="screen__scroll screen__scroll--bleed">
-              <div class="photo-slot"><div class="photo" data-photo></div></div>
-              <div class="surface surface--over-hero"><div class="blocks" data-blocks="6"></div></div>
-            </div>
-            <div class="chrome chrome--paints">
-              <div class="chrome__fill"></div>
-              <span class="navbar-scrim navbar-scrim--leading"></span>
-              <span class="navbar-scrim navbar-scrim--trailing"></span>
-              <div class="statusbar"></div>
-              <div class="navbar"></div>
-              <span class="navbar-title"></span>
-              <div class="chrome__hairline"></div>
-            </div>
-            <div class="home"></div>
-          </div>
-          <div class="device__frame"></div>
-        </div>
-      </div>
-      <p class="sample__how">Навбар красит себя сам: флип на пороге 155pt, дальше переход 0.2s. Фото сжимается в слоте фиксированной высоты. Скругления нет.</p>
-      <div class="sample__readout"></div>
-    </div>
 
-
-    <div class="sample" style="--level-page: var(--bg-secondary); --level-scroll: var(--bg-secondary)">
-      <div class="sample__head">
-        <h3 class="sample__name">Dissolve <span class="sample__badge">экран из макета, механика — в гараже</span></h3>
-        <p class="sample__sub">промо-лендинг</p>
-        <p class="sample__use"><b>Берите, если</b> верх декоративный и его можно погасить.</p>
+      <div class="panel panel--pad">
+        <p class="panel__label">Показ</p>
+        <label class="switch">
+          <span>Границы слоёв</span>
+          <input type="checkbox" data-toggle="debug">
+          <span class="switch__track"></span>
+        </label>
+        <label class="switch">
+          <span>Что за рамкой</span>
+          <input type="checkbox" data-toggle="xray">
+          <span class="switch__track"></span>
+        </label>
+        <label class="switch">
+          <span>Синхронный скролл</span>
+          <input type="checkbox" data-toggle="sync" checked>
+          <span class="switch__track"></span>
+        </label>
       </div>
-<div class="device-slot">
-        <div class="device" data-pattern="promo">
-          <div class="device__screen">
-            <div class="screen__bg">
-              <div class="screen__photo">
-                <div class="promo-caption"><i></i><i></i></div>
-                <div class="promo-dots"><i></i><i></i><i></i><i></i><i></i></div>
-              </div>
-            </div>
-            <div class="screen__scroll">
-              <div class="promo-space"></div>
-              <div class="surface">
-                <div class="controls">
-                  <div class="searchfield"></div>
-                  <div class="tiles"><i></i><i></i><i></i><i></i></div>
+    </aside>
+
+    <main class="stage">
+
+      <section class="sample" data-sample="plain" data-group="overflow">
+        <div class="sample__stage">
+          <div class="device-slot">
+            <div class="device">
+              <div class="device__screen">
+                <div class="screen__bg"></div>
+                <div class="screen__scroll">
+                  <div class="surface"><div class="plain"></div></div>
                 </div>
-                <div class="blocks" data-blocks="5"></div>
-              </div>
-            </div>
-            <div class="chrome chrome--over">
-              <span class="navbar-scrim navbar-scrim--leading"></span>
-              <span class="navbar-scrim navbar-scrim--trailing"></span>
-              <div class="statusbar"></div>
-              <div class="navbar"></div>
-              <span class="navbar-title"></span>
-            </div>
-            <div class="home"></div>
-          </div>
-          <div class="device__frame"></div>
-        </div>
-      </div>
-      <p class="sample__how">Hero осветляется до фона страницы, поэтому заливка навбару не нужна. Скругление есть. Экран промо в приложении не собран, но механика работает в гараже: замер непрозрачности hero дал 0.65 против расчётных 0.63.</p>
-      <div class="sample__readout"></div>
-    </div>
-
-  </div>
-
-  <div class="board__section">
-    <h2>Collapse</h2>
-    <p>Единственный паттерн, где скролл не делает ничего особенного: заголовок уезжает и
-      появляется в навбаре, дальше обычный скролл. Полоса навбара залита фоном страницы, как
-      в <code>Overflow</code>, и не меняется.</p>
-  </div>
-
-  <div class="board__row">
-
-    <div class="sample" style="--level-scroll: var(--bg-secondary)">
-      <div class="sample__head">
-        <h3 class="sample__name">Collapse</h3>
-        <p class="sample__sub">хаб маркета · порог 52pt</p>
-        <p class="sample__use"><b>Берите, если</b> нужен крупный заголовок, который уезжает и переходит в навбар.</p>
-      </div>
-      <div class="device-slot">
-        <div class="device" data-pattern="collapse">
-          <div class="device__screen">
-            <div class="screen__bg"></div>
-            <div class="screen__scroll">
-              <div class="pagetitle"></div>
-              <div class="surface">
-                <div class="subhead">
-                  <div class="searchfield"></div>
-                  <div class="categories"><i></i><i></i><i></i></div>
+                <div class="chrome">
+                  <div class="statusbar"></div>
+                  <div class="navbar"></div>
                 </div>
-                <div class="blocks" data-blocks="5"></div>
+                <div class="home"></div>
               </div>
+              <div class="device__frame"></div>
             </div>
-            <div class="chrome">
-              <div class="statusbar"></div>
-              <div class="navbar"></div>
-              <span class="navbar-title"></span>
-            </div>
-            <div class="home"></div>
           </div>
-          <div class="device__frame"></div>
         </div>
-      </div>
-      <p class="sample__how">Заголовок уезжает обычным элементом, в навбаре на его месте появляется заголовок экрана — и на этом всё. Дальше обычный скролл: ничего не пиннится и не наслаивается. В приложении порог 52pt, флип 0.2s; полоса навбара залита фоном страницы и не меняется.</p>
-      <div class="sample__readout"></div>
-    </div>
+        <div class="sample__info">
+          <h2 class="sample__name">Plain</h2>
+          <p class="sample__sub">tertiary → primary</p>
+          <p class="sample__use"><b>Берите, если</b> на экране одно плоское полотно: текст, простой
+            список, детали.</p>
+          <p class="sample__ctx">Overflow — полосу навбара закрывает само полотно контента: оно
+            наезжает скруглённым верхом и уходит под хром. Навбар залит фоном страницы и не меняется.</p>
+          <p class="sample__how">Полотно стоит под навбаром и уходит под него скруглённым верхом.</p>
+                    <div class="detail">
+            <p class="detail__label">Слои</p>
+            <div class="layers" data-layers></div>
+          </div>
+          <div class="detail">
+            <p class="detail__label">Что делает скролл</p>
+            <ol class="steps">
+              <li>Полотно лежит под навбаром и уезжает под него как обычный элемент.</li>
+              <li>Верх полотна скруглён — стык прячет радиус, а не заливка.</li>
+              <li>Навбар залит фоном страницы и на всём пути не меняется.</li>
+            </ol>
+          </div>
+          <div class="detail">
+            <p class="detail__label">Числа</p>
+            <dl class="numbers" data-numbers></dl>
+          </div>
+          <p class="sample__where">Где живёт: Текстовые экраны и простые списки.</p>
+          <div class="sample__readout"></div>
+        </div>
+      </section>
+
+      <section class="sample" data-sample="feed" data-group="overflow" style="--level-scroll: var(--bg-secondary)">
+        <div class="sample__stage">
+          <div class="device-slot">
+            <div class="device">
+              <div class="device__screen">
+                <div class="screen__bg"></div>
+                <div class="screen__scroll">
+                  <div class="filterbar" data-pin><i></i><i></i><i></i><i></i><i></i></div>
+                  <div class="surface surface--rides"><div class="blocks" data-blocks="6"></div></div>
+                </div>
+                <div class="chrome">
+                  <div class="statusbar"></div>
+                  <div class="navbar"></div>
+                </div>
+                <div class="home"></div>
+              </div>
+              <div class="device__frame"></div>
+            </div>
+          </div>
+        </div>
+        <div class="sample__info">
+          <h2 class="sample__name">Feed</h2>
+          <p class="sample__sub">tertiary → secondary → primary</p>
+          <p class="sample__use"><b>Берите, если</b> элементы должны читаться отдельными карточками
+            на утопленном поле.</p>
+          <p class="sample__ctx">Overflow — полосу навбара закрывает само полотно контента: оно
+            наезжает скруглённым верхом и уходит под хром. Навбар залит фоном страницы и не меняется.</p>
+          <p class="sample__how">Ряд фильтров придерживается 68pt — ровно на эту разницу полотно и
+            наезжает.</p>
+                    <div class="detail">
+            <p class="detail__label">Слои</p>
+            <div class="layers" data-layers></div>
+          </div>
+          <div class="detail">
+            <p class="detail__label">Что делает скролл</p>
+            <ol class="steps">
+              <li>Ряд фильтров придерживается: <code>pin = max(0, min(scrollY, 68))</code>.</li>
+              <li>Клампы с двух сторон обязательны — без нижнего bounce даёт отрицательный оффсет и ряд прыгает вниз.</li>
+              <li>Полотно наезжает ровно на высоту придержанного ряда, дальше идёт обычным скроллом.</li>
+            </ol>
+          </div>
+          <div class="detail">
+            <p class="detail__label">Числа</p>
+            <dl class="numbers" data-numbers></dl>
+          </div>
+          <p class="sample__where">Где живёт: Лента объявлений.</p>
+          <div class="sample__readout"></div>
+        </div>
+      </section>
+
+      <section class="sample" data-sample="accent" data-group="overflow" style="--level-page: var(--bg-brand); --level-scroll: var(--bg-secondary)">
+        <div class="sample__stage">
+          <div class="device-slot">
+            <div class="device">
+              <div class="device__screen">
+                <div class="screen__bg">
+                  <div class="screen__graphic screen__graphic--a"></div>
+                  <div class="screen__graphic screen__graphic--b"></div>
+                </div>
+                <div class="screen__scroll">
+                  <div class="hero-space"></div>
+                  <div class="surface surface--over-hero"><div class="blocks" data-blocks="6"></div></div>
+                </div>
+                <div class="chrome chrome--over">
+                  <div class="statusbar"></div>
+                  <div class="navbar"></div>
+                </div>
+                <div class="home"></div>
+              </div>
+              <div class="device__frame"></div>
+            </div>
+          </div>
+        </div>
+        <div class="sample__info">
+          <h2 class="sample__name">Accent</h2>
+          <p class="sample__sub">accent → primary</p>
+          <p class="sample__use"><b>Берите, если</b> разделу нужен брендовый верх с графикой.</p>
+          <p class="sample__ctx">Overflow — полосу навбара закрывает само полотно контента: оно
+            наезжает скруглённым верхом и уходит под хром. Навбар залит фоном страницы и не меняется.</p>
+          <p class="sample__how">Графика лежит на фоновом слое и не обрезается навбаром. Наезд
+            статический, равен радиусу.</p>
+                    <div class="detail">
+            <p class="detail__label">Слои</p>
+            <div class="layers" data-layers></div>
+          </div>
+          <div class="detail">
+            <p class="detail__label">Что делает скролл</p>
+            <ol class="steps">
+              <li>Графика лежит на фоновом слое, вне скролла, и навбаром не обрезается.</li>
+              <li>Полотно наслаивается поверх акцентной зоны и уходит под хром.</li>
+              <li>Наезд статический, равен радиусу: от скролла он не зависит.</li>
+            </ol>
+          </div>
+          <div class="detail">
+            <p class="detail__label">Числа</p>
+            <dl class="numbers" data-numbers></dl>
+          </div>
+          <p class="sample__where">Где живёт: Брендовые разделы с графикой в шапке.</p>
+          <div class="sample__readout"></div>
+        </div>
+      </section>
+
+      <section class="sample" data-sample="paint" data-group="hero" style="--level-scroll: var(--bg-secondary); --level-page: var(--bg-secondary)">
+        <div class="sample__stage">
+          <div class="device-slot">
+            <div class="device" data-pattern="paint">
+              <div class="device__screen">
+                <div class="screen__bg"></div>
+                <div class="screen__scroll screen__scroll--bleed">
+                  <div class="photo-slot"><div class="photo" data-photo></div></div>
+                  <div class="surface surface--over-hero"><div class="blocks" data-blocks="6"></div></div>
+                </div>
+                <div class="chrome chrome--paints">
+                  <div class="chrome__fill"></div>
+                  <span class="navbar-scrim navbar-scrim--leading"></span>
+                  <span class="navbar-scrim navbar-scrim--trailing"></span>
+                  <div class="statusbar"></div>
+                  <div class="navbar"></div>
+                  <span class="navbar-title"></span>
+                  <div class="chrome__hairline"></div>
+                </div>
+                <div class="home"></div>
+              </div>
+              <div class="device__frame"></div>
+            </div>
+          </div>
+        </div>
+        <div class="sample__info">
+          <h2 class="sample__name">Paint</h2>
+          <p class="sample__sub">карточка объявления</p>
+          <p class="sample__use"><b>Берите, если</b> под хромом фото и оно должно быть видно до
+            верхнего края.</p>
+          <p class="sample__ctx">Hero приколот к верху и никуда не уезжает. С Dissolve расходятся
+            только тем, чем закрыта полоса навбара.</p>
+          <p class="sample__how">Навбар красит себя сам: флип на пороге 155pt, дальше переход 0.2s.
+            Фото сжимается в слоте фиксированной высоты. Скругления нет.</p>
+                    <div class="detail">
+            <p class="detail__label">Слои</p>
+            <div class="layers" data-layers></div>
+          </div>
+          <div class="detail">
+            <p class="detail__label">Что делает скролл</p>
+            <ol class="steps">
+              <li>Скроллпорт идёт во весь экран и сверху не скруглён — фото обязано уходить под статус-бар.</li>
+              <li>Фото приколото к верху слота и сжимается: <code>frame(height: base + minY).offset(y: -minY)</code>. Слот высоту не меняет.</li>
+              <li>Заливка навбара — булев флип, а не интерполяция: <code>(scrollY − 130) / 50</code> переваливает за 0.5, дальше переход 0.2s.</li>
+            </ol>
+          </div>
+          <div class="detail">
+            <p class="detail__label">Числа</p>
+            <dl class="numbers" data-numbers></dl>
+          </div>
+          <p class="sample__where">Где живёт: Карточка объявления.</p>
+          <div class="sample__readout"></div>
+        </div>
+      </section>
+
+      <section class="sample" data-sample="promo" data-group="hero" style="--level-page: var(--bg-secondary); --level-scroll: var(--bg-secondary)">
+        <div class="sample__stage">
+          <div class="device-slot">
+            <div class="device" data-pattern="promo">
+              <div class="device__screen">
+                <div class="screen__bg">
+                  <div class="screen__photo">
+                    <div class="promo-caption"><i></i><i></i></div>
+                    <div class="promo-dots"><i></i><i></i><i></i><i></i><i></i></div>
+                  </div>
+                </div>
+                <div class="screen__scroll">
+                  <div class="promo-space"></div>
+                  <div class="surface">
+                    <div class="controls">
+                      <div class="searchfield"></div>
+                      <div class="tiles"><i></i><i></i><i></i><i></i></div>
+                    </div>
+                    <div class="blocks" data-blocks="5"></div>
+                  </div>
+                </div>
+                <div class="chrome chrome--over">
+                  <span class="navbar-scrim navbar-scrim--leading"></span>
+                  <span class="navbar-scrim navbar-scrim--trailing"></span>
+                  <div class="statusbar"></div>
+                  <div class="navbar"></div>
+                  <span class="navbar-title"></span>
+                </div>
+                <div class="home"></div>
+              </div>
+              <div class="device__frame"></div>
+            </div>
+          </div>
+        </div>
+        <div class="sample__info">
+          <h2 class="sample__name">Dissolve <span class="sample__badge">экран из макета, механика — в гараже</span></h2>
+          <p class="sample__sub">промо-лендинг</p>
+          <p class="sample__use"><b>Берите, если</b> верх декоративный и его можно погасить.</p>
+          <p class="sample__ctx">Hero приколот к верху и никуда не уезжает. С Paint расходятся только
+            тем, чем закрыта полоса навбара.</p>
+          <p class="sample__how">Hero осветляется до фона страницы, поэтому заливка навбару не нужна.
+            Скругление есть. Экран промо в приложении не собран, но механика работает в гараже: замер
+            непрозрачности hero дал 0.65 против расчётных 0.63.</p>
+                    <div class="detail">
+            <p class="detail__label">Слои</p>
+            <div class="layers" data-layers></div>
+          </div>
+          <div class="detail">
+            <p class="detail__label">Что делает скролл</p>
+            <ol class="steps">
+              <li>Hero лежит отдельным слоем вне скролла и не двигается.</li>
+              <li>Контент наслаивается поверх и параллельно осветляет hero до фона страницы.</li>
+              <li>К концу наезда в полосе навбара уже фон страницы, поэтому заливка навбару не нужна.</li>
+            </ol>
+          </div>
+          <div class="detail">
+            <p class="detail__label">Числа</p>
+            <dl class="numbers" data-numbers></dl>
+          </div>
+          <p class="sample__where">Где живёт: Промо-лендинг — в приложении не собран, механика проверена в гараже.</p>
+          <div class="sample__readout"></div>
+        </div>
+      </section>
+
+      <section class="sample" data-sample="collapse" data-group="other" style="--level-scroll: var(--bg-secondary)">
+        <div class="sample__stage">
+          <div class="device-slot">
+            <div class="device" data-pattern="collapse">
+              <div class="device__screen">
+                <div class="screen__bg"></div>
+                <div class="screen__scroll">
+                  <div class="pagetitle"></div>
+                  <div class="surface">
+                    <div class="subhead">
+                      <div class="searchfield"></div>
+                      <div class="categories"><i></i><i></i><i></i></div>
+                    </div>
+                    <div class="blocks" data-blocks="5"></div>
+                  </div>
+                </div>
+                <div class="chrome">
+                  <div class="statusbar"></div>
+                  <div class="navbar"></div>
+                  <span class="navbar-title"></span>
+                </div>
+                <div class="home"></div>
+              </div>
+              <div class="device__frame"></div>
+            </div>
+          </div>
+        </div>
+        <div class="sample__info">
+          <h2 class="sample__name">Collapse</h2>
+          <p class="sample__sub">хаб маркета · порог 52pt</p>
+          <p class="sample__use"><b>Берите, если</b> нужен крупный заголовок, который уезжает и
+            переходит в навбар.</p>
+          <p class="sample__ctx">Единственный паттерн, где скролл не делает ничего особенного. Полоса
+            навбара залита фоном страницы, как в Overflow, и не меняется.</p>
+          <p class="sample__how">Заголовок уезжает обычным элементом, в навбаре на его месте
+            появляется заголовок экрана — и на этом всё. Дальше обычный скролл: ничего не пиннится и
+            не наслаивается. В приложении порог 52pt, флип 0.2s.</p>
+                    <div class="detail">
+            <p class="detail__label">Слои</p>
+            <div class="layers" data-layers></div>
+          </div>
+          <div class="detail">
+            <p class="detail__label">Что делает скролл</p>
+            <ol class="steps">
+              <li>Крупный заголовок уезжает обычным элементом, подхедер придерживается.</li>
+              <li>Когда заголовок ушёл под полосу, в навбаре появляется заголовок экрана — флип 0.2s.</li>
+              <li>Больше ничего: ни наезда, ни заливки, ни пиннинга поверх.</li>
+            </ol>
+          </div>
+          <div class="detail">
+            <p class="detail__label">Числа</p>
+            <dl class="numbers" data-numbers></dl>
+          </div>
+          <p class="sample__where">Где живёт: Хаб маркета.</p>
+          <div class="sample__readout"></div>
+        </div>
+      </section>
+
+    </main>
   </div>
-
-
 
   <footer class="board__footer">
     <p>Геометрия внутри мокапа — в pt, один к одному со спекой; сам мокап уменьшен.
