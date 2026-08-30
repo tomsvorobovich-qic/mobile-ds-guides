@@ -12,8 +12,8 @@ title: Mobile DS Guides
 <ul class="card-list">
   <li>
     <a href="guides/scroll-patterns.html">Хедер и поверхности</a>
-    <p>Четыре паттерна — <code>Overflow</code>, <code>Paint</code>, <code>Dissolve</code>,
-    <code>Collapse</code> — и три вопроса, по которым выбирается нужный.
+    <p>Три паттерна — <code>Overflow</code>, <code>Pinned hero</code>,
+    <code>Collapse</code> — и два вопроса, по которым выбирается нужный.
     <a href="stands/scroll-patterns.html">Стенд →</a></p>
   </li>
 </ul>
